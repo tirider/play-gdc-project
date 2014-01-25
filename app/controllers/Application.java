@@ -2,7 +2,7 @@ package controllers;
  
 import java.io.ByteArrayOutputStream; 
 import java.util.Date;
- 
+
 import com.hp.hpl.jena.n3.turtle.parser.ParseException;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -12,8 +12,9 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
- 
+
 import models.beans.Region;
+import models.datamodel.DataModelFactory;
 import models.endpoint.SparqlEndpoint;
 import models.global.Core;
 import models.query.QueryRunner; 
@@ -22,8 +23,10 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
-import play.mvc.Result; 
+import play.mvc.Result;
+import views.html.index;
 import views.html.sparqlresults;
+import views.html.results;
 
 public class Application extends Controller 
 {
@@ -34,7 +37,7 @@ public class Application extends Controller
 	 */
     public static Result index() 
     {
-    	return ok(views.html.index.render());    		
+    	return ok(index.render());
     }
 
     /**
@@ -51,7 +54,7 @@ public class Application extends Controller
         if(QueryRunner.isServiceUp())  { regionObj = DBPediaService.parse(region); }
         */
         
-		return ok(views.html.results.render(region, new Date()));
+		return ok();
     }
     
     /**
@@ -64,9 +67,7 @@ public class Application extends Controller
     	String query = dynamicForm.get("query");
     	String format = null;
     	format = dynamicForm.get("format");
-    	
-    	System.out.printf(String.valueOf(query), String.valueOf(format));
-    	
+
     	int formatInt = 0;
     	if(format == null) {
     		if(request().accepts("text/html")) {
@@ -90,10 +91,12 @@ public class Application extends Controller
     		formatInt = Core.parseInt(format);
     	}
     	
+    	Model m = launch();
+    	
     	// CHECKING FOR VALID QUERY
-    	ResultSet results = SparqlEndpoint.queryData(query);
+    	ResultSet results = SparqlEndpoint.queryData(m, query);
     	if(results == null) {
-    		return ok(sparqlresults.render("Error on SPARQL query"));
+    		//return ok(sparqlresults.render("Error on SPARQL query"));
     	}
 
 		switch(formatInt) {
@@ -119,57 +122,49 @@ public class Application extends Controller
 		}
 		return null;
     }
-    
-    /*
-     * 
-	public static void launch()
+
+	public static Model launch()
 	{
 		// MOEL GENERAL
 		Model global = ModelFactory.createDefaultModel();
 		
 		// RECUPERER LE MODEL DE MONGODB
-		Model mongodb = DataModelFactory.createMongoModel();
+		//Model mongodb = DataModelFactory.createMongoModel();
 
 		// RECUPERER LE MODEL DE TDB
 		Model tdb = DataModelFactory.createTDBModel();
 		
 		// RECUPERER LE MODEL DE D2RQ
-		Model d2rq = DataModelFactory.createD2RQModel();
+		//Model d2rq = DataModelFactory.createD2RQModel();
 
 		// RECUPERER LE MODEL DE HBASE
 		
 		// RECUPERER LE MODEL DE NEO4J
 		
 		// FOUSSIONER DES MODELS -- EXAMPLE
-		global.add(mongodb);
-		global.add(d2rq);
+		global.add(tdb);
+		//global.add(d2rq);
 		
 		// GERER LES LIENS ENTRE MODELS
 		
 		// EXECUTER DES REQUETES SPARQL
 		
 		// QUERY STRING -- FIND ALL TRIEPLETS -- EXAMPLE QUERY
-		String queryString = "SELECT * WHERE { ?s ?p ?o} limit 50";
-        Query query = QueryFactory.create(queryString) ;
-        
-        // PREPARING QUERY
-        QueryExecution qexec = QueryExecutionFactory.create(query, global) ;
-        
-		ResultSet rs = qexec.execSelect() ;
-		ResultSetFormatter.out(System.out, rs, query);		
+//		String queryString = "SELECT * WHERE { ?s ?p ?o} limit 50";
+//        Query query = QueryFactory.create(queryString) ;
+//        
+//        // PREPARING QUERY
+//        QueryExecution qexec = QueryExecutionFactory.create(query, global);
+//        
+//		ResultSet rs = qexec.execSelect() ;
+//		ResultSetFormatter.out(System.out, rs, query);
 		
 		// FERMETURE TOUS LES REFERENCES
-		d2rq.close();
-		mongodb.close();
+		//d2rq.close();
+		//mongodb.close();
 		tdb.close();
-		global.close();
+		//global.close();
+		
+		return global;
 	}
-	
-	/** Main function called from client.
-	 * @param args/
-	public static void main(String[] args) 
-	{
-		Launcher.launch();
-	}
-     */
 }

@@ -89,7 +89,7 @@ public class TDBDatasetDAO
         geoInsee.add(apcli, OWL.equivalentClass, igeoPays);
 		
 		// CLOSE THE DATASET
-		ds.close();
+		//ds.close();
 		
 		// REVOIE DU MODEL COMPLET
 		return geoInsee;

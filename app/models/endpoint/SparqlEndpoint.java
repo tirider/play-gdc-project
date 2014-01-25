@@ -16,25 +16,14 @@ import com.hp.hpl.jena.vocabulary.RDFS;
 
 public class SparqlEndpoint {
 
-	public static ResultSet queryData(String q)
+	public static ResultSet queryData(Model m, String q)
 	{
-		Model taweb = null;
-
-        // GET NAMESPACES FROM MODELS
-        @SuppressWarnings("null")
-		String dbpediaowlNS = taweb.getNsPrefixURI("dbpedia-owl");
-    	String dbpediaNS = taweb.getNsPrefixURI("dbpedia");
-    	String dbppropNS = taweb.getNsPrefixURI("dbpprop");
-
     	// PREFIXES
     	String prefixes = 	"PREFIX rdfs: <"+RDFS.getURI()+"> "+
     						"PREFIX rdf: <"+RDF.getURI()+"> " +
     						"PREFIX owl: <"+OWL.getURI()+"> " +
     						"PREFIX dc: <"+DC.getURI()+"> " +
     						"PREFIX foaf: <"+FOAF.getURI()+"> "+
-    						"PREFIX dbpedia-owl: <"+dbpediaowlNS+"> "+
-    						"PREFIX dbpedia: <"+dbpediaNS+"> " +
-    						"PREFIX dbpprop: <"+dbppropNS+"> " +
     						"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>";
 
         // SPARQL
@@ -44,7 +33,7 @@ public class SparqlEndpoint {
     			
     	try {
 	        Query query = QueryFactory.create(q1);
-	        QueryExecution qexec = QueryExecutionFactory.create(query, taweb);
+	        QueryExecution qexec = QueryExecutionFactory.create(query, m);
 	        results = qexec.execSelect();
     	}
     	catch(Exception e) {
@@ -54,7 +43,7 @@ public class SparqlEndpoint {
     	{
     		try 
     		{
-        		taweb.close();
+        		//m.close();
 			} 
     		catch (Exception e2) 
     		{
