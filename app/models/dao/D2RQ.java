@@ -2,6 +2,8 @@ package models.dao;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
+import de.fuberlin.wiwiss.d2rq.jena.ModelD2RQ;
+
 
 public class D2RQ 
 {
@@ -20,7 +22,7 @@ public class D2RQ
 	 */
 	private D2RQ()
 	{
-		d2rqModel = (Model) new play.db.ebean.Model();//new ModelD2RQ("file:public/data/d2rq/mapping_manual.n3");
+		d2rqModel = new ModelD2RQ("file:public/data/d2rq/mapping_manual.n3");
 	}
 	
 	/**
