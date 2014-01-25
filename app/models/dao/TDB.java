@@ -1,11 +1,13 @@
 package models.dao;
 
+import play.Play;
+
 import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.query.*;
 
 public class TDB 
 {
-	public static final String DIRECTORY = "data/tdb";
+	public static final String DIRECTORY = Play.application().path() + "/public/data/tdb";
 	
 	private static TDB instance = null;
 	private Dataset dataset = null;

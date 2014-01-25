@@ -1,5 +1,3 @@
-package dataimporter;
-
 import java.io.File;
 
 public class CSVReader 
