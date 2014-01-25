@@ -4,9 +4,13 @@ import com.hp.hpl.jena.rdf.model.Model;
 
 import de.fuberlin.wiwiss.d2rq.jena.ModelD2RQ;
 
-
 public class D2RQ 
 {
+	/**
+	 * Hols the d2rq mapping file path
+	 */
+	private static final String MAPPING_PATH  = "/app/models/dao/d2rq-mapping.n3";
+	
 	/**
 	 * Instance class D2RQ.
 	 */
@@ -22,7 +26,9 @@ public class D2RQ
 	 */
 	private D2RQ()
 	{
-		d2rqModel = new ModelD2RQ("file:public/data/d2rq/mapping_manual.n3");
+		//File file = Play.current().getFile(MAPPING_FILE_PATH);
+		
+		d2rqModel = new ModelD2RQ(MAPPING_PATH);
 	}
 	
 	/**
