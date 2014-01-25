@@ -12,8 +12,6 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
  
 
 public class DataModelMongoDB implements IDataModel
@@ -25,18 +23,14 @@ public class DataModelMongoDB implements IDataModel
 		Model model = ModelFactory.createDefaultModel(); 
 		
 		// CREATION DE L'ALIAS (NAMESPACE)
-		String ns    = "http://www.turisme-france.fr/statistics#";
-		String alias = "turisme";
+		String ns    = "http://www.tourisme.fr/";
+		String alias = "trsm";
 		model.setNsPrefix(alias, ns);
 		
 		// GET DATABASE HANDLER
 		MongoDBDAO mdh = new MongoDBDAO(MongoDB.getInstance());
 		
-		// CREATION DE RESOURCES (SUJETS)
-		Resource resourceTableName = model.createResource(ns+mdh.getName());
-		
 		// CREATION DES RESOURCES PROPRIETES (PREDICATES)
-		Property hasDepartementId  = model.createProperty(ns,MongoDBDAO.TABLE_FIELD_1);
 		Property hasHotel0e        = model.createProperty(ns,MongoDBDAO.TABLE_FIELD_2);
 		Property hasHotel1e        = model.createProperty(ns,MongoDBDAO.TABLE_FIELD_3);
 		Property hasHotel2e        = model.createProperty(ns,MongoDBDAO.TABLE_FIELD_4);
@@ -45,9 +39,6 @@ public class DataModelMongoDB implements IDataModel
 		Property hasHotel5e        = model.createProperty(ns,MongoDBDAO.TABLE_FIELD_7);
 		Property hasYear           = model.createProperty(ns,MongoDBDAO.TABLE_FIELD_8);
 	
-		// CREATION D'OBJECTS
-		model.add(resourceTableName,RDF.type, RDFS.Class);
-		
 		// DATA TYPE DEFINITION
 		RDFDatatype numericType = XSDBaseNumericType.XSDbase64Binary;
 		RDFDatatype yearType = XSDYearType.XSDgYear;
@@ -57,21 +48,25 @@ public class DataModelMongoDB implements IDataModel
 		{
 			// ASSURER QUE LE RDF GARDER QUE DES LITERALES NON ZERO
 			if(!dh.getDepId().isEmpty())
-				model.add(resourceTableName, hasDepartementId, dh.getDepId(), numericType);
-			if(!dh.getHotel0E().isEmpty())
-				model.add(resourceTableName, hasHotel0e, dh.getHotel0E(), numericType);
-			if(!dh.getHotel1E().isEmpty())
-				model.add(resourceTableName, hasHotel1e, dh.getHotel1E(), numericType);
-			if(!dh.getHotel2E().isEmpty())
-				model.add(resourceTableName, hasHotel2e, dh.getHotel2E(), numericType);
-			if(!dh.getHotel3E().isEmpty())
-				model.add(resourceTableName, hasHotel3e, dh.getHotel3E(), numericType);
-			if(!dh.getHotel4E().isEmpty())
-				model.add(resourceTableName, hasHotel4e, dh.getHotel4E(), numericType);
-			if(!dh.getHotel5E().isEmpty())
-				model.add(resourceTableName, hasHotel5e, dh.getHotel5E(), numericType);
-			if(!dh.getYear().isEmpty())
-				model.add(resourceTableName, hasYear, dh.getYear(), yearType);
+			{
+				// ON DIT QUE CHAQUE ID DE DEP. DANS TOURISME EST UNE RESOURCE 
+				Resource resource = model.createResource(ns+"departement/"+dh.getDepId());
+				
+				if(!dh.getHotel0E().isEmpty())
+					model.add(resource, hasHotel0e, dh.getHotel0E(), numericType);
+				if(!dh.getHotel1E().isEmpty())
+					model.add(resource, hasHotel1e, dh.getHotel1E(), numericType);
+				if(!dh.getHotel2E().isEmpty())
+					model.add(resource, hasHotel2e, dh.getHotel2E(), numericType);
+				if(!dh.getHotel3E().isEmpty())
+					model.add(resource, hasHotel3e, dh.getHotel3E(), numericType);
+				if(!dh.getHotel4E().isEmpty())
+					model.add(resource, hasHotel4e, dh.getHotel4E(), numericType);
+				if(!dh.getHotel5E().isEmpty())
+					model.add(resource, hasHotel5e, dh.getHotel5E(), numericType);
+				if(!dh.getYear().isEmpty())
+					model.add(resource, hasYear,dh.getYear(), yearType);
+			}
 		}		
 		
 		return model;

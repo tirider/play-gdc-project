@@ -128,7 +128,7 @@ public class Application extends Controller
 
 	public static Model launch()
 	{
-		// MOEL GENERAL
+		// MODEL GENERAL
 		Model global = ModelFactory.createDefaultModel();
 		
 		// RECUPERER LE MODEL DE MONGODB
