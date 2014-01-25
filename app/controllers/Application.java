@@ -43,6 +43,53 @@ public class Application extends Controller
     	return ok(index.render());
     }
 
+	public static Model launch()
+	{
+		// MODEL GENERAL
+		Model global = ModelFactory.createDefaultModel();
+		
+		// RECUPERER LE MODEL DE MONGODB
+		//Model mongodb = DataModelFactory.createMongoModel();
+
+		// RECUPERER LE MODEL DE TDB
+		Model tdb = DataModelFactory.createTDBModel();
+		
+		// RECUPERER LE MODEL DE D2RQ
+		//Model d2rq = DataModelFactory.createD2RQModel();
+
+		// RECUPERER LE MODEL DE HBASE
+		Model hbase = DataModelFactory.createHBaseModel();
+		
+		// RECUPERER LE MODEL DE NEO4J
+		
+		// FOUSSIONER DES MODELS -- EXAMPLE
+		global.add(tdb);
+		global.add(hbase);
+		//global.add(d2rq);
+		
+		// GERER LES LIENS ENTRE MODELS
+		
+		// EXECUTER DES REQUETES SPARQL
+		
+		// QUERY STRING -- FIND ALL TRIEPLETS -- EXAMPLE QUERY
+//		String queryString = "SELECT * WHERE { ?s ?p ?o} limit 50";
+//        Query query = QueryFactory.create(queryString) ;
+//        
+//        // PREPARING QUERY
+//        QueryExecution qexec = QueryExecutionFactory.create(query, global);
+//        
+//		ResultSet rs = qexec.execSelect() ;
+//		ResultSetFormatter.out(System.out, rs, query);
+		
+		// FERMETURE TOUS LES REFERENCES
+		//d2rq.close();
+		//mongodb.close();
+		tdb.close();
+		//global.close();
+		
+		return global;
+	}
+	
     /**
      * This method provide access to the result page.
      * @param regionName
@@ -52,10 +99,6 @@ public class Application extends Controller
     {
         Region region = new Region();
         region.setName(regionName);
-        
-        /*
-        if(QueryRunner.isServiceUp())  { regionObj = DBPediaService.parse(region); }
-        */
         
 		return ok();
     }
@@ -125,51 +168,4 @@ public class Application extends Controller
 		}
 		return null;
     }
-
-	public static Model launch()
-	{
-		// MODEL GENERAL
-		Model global = ModelFactory.createDefaultModel();
-		
-		// RECUPERER LE MODEL DE MONGODB
-		//Model mongodb = DataModelFactory.createMongoModel();
-
-		// RECUPERER LE MODEL DE TDB
-		Model tdb = DataModelFactory.createTDBModel();
-		
-		// RECUPERER LE MODEL DE D2RQ
-		//Model d2rq = DataModelFactory.createD2RQModel();
-
-		// RECUPERER LE MODEL DE HBASE
-		Model hbase = DataModelFactory.createHBaseModel();
-		
-		// RECUPERER LE MODEL DE NEO4J
-		
-		// FOUSSIONER DES MODELS -- EXAMPLE
-		global.add(tdb);
-		global.add(hbase);
-		//global.add(d2rq);
-		
-		// GERER LES LIENS ENTRE MODELS
-		
-		// EXECUTER DES REQUETES SPARQL
-		
-		// QUERY STRING -- FIND ALL TRIEPLETS -- EXAMPLE QUERY
-//		String queryString = "SELECT * WHERE { ?s ?p ?o} limit 50";
-//        Query query = QueryFactory.create(queryString) ;
-//        
-//        // PREPARING QUERY
-//        QueryExecution qexec = QueryExecutionFactory.create(query, global);
-//        
-//		ResultSet rs = qexec.execSelect() ;
-//		ResultSetFormatter.out(System.out, rs, query);
-		
-		// FERMETURE TOUS LES REFERENCES
-		//d2rq.close();
-		//mongodb.close();
-		tdb.close();
-		//global.close();
-		
-		return global;
-	}
 }
