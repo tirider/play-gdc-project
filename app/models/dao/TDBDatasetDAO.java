@@ -4,13 +4,17 @@ import java.io.File;
 
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.OWL;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 public class TDBDatasetDAO
 {
 	private TDB tdb = null;
+	private static final String trsm = "http://www.tourisme.fr/";
 	
 	/**
 	 * 
@@ -42,6 +46,9 @@ public class TDBDatasetDAO
     	String voafNS = geonames.getNsPrefixURI("voaf");
     	String vannNS = geonames.getNsPrefixURI("vann");
     	String ccNS = geonames.getNsPrefixURI("cc");
+    	
+    	// SET NAMESPACES
+    	geoInsee.setNsPrefix("trsm", trsm);
 
         // MERGE GRAPHS
     	geoInsee.add(popInsee).add(geonames);
@@ -87,6 +94,21 @@ public class TDBDatasetDAO
         
         geoInsee.add(igeoPays, OWL.equivalentClass, apcli);
         geoInsee.add(apcli, OWL.equivalentClass, igeoPays);
+        
+        Resource DepartementR = geoInsee.getResource(igeoNS + "Departement"); // Class Resource
+        Property tourismeProp = geoInsee.createProperty(trsm + "info"); // Propriete pour lier la Resource du Departement Insee a la resource Tourisme
+        Property codeDepartementProp = geoInsee.getProperty(igeoNS + "codeDepartement"); // Recuperer le code de departement pour creer la resource de Tourisme
+        Resource TourismeClass = geoInsee.createResource(igeoNS + "Tourisme"); // Creer la class Tourisme
+        
+        // AJOUTER DANS CHAQUE DEPARTEMENT LA PROPRIETE AVEC LA RESOURCE DE TOURISME
+		ResIterator res_i = geoInsee.listSubjectsWithProperty(RDF.type, DepartementR);
+		while (res_i.hasNext())
+		{
+			Resource r = res_i.nextResource();
+			Resource DepartementTourismeR = geoInsee.createResource(trsm + "departement/" + r.getProperty(codeDepartementProp).getLiteral());
+			r.addProperty(tourismeProp, DepartementTourismeR);
+			DepartementTourismeR.addProperty(RDF.type, TourismeClass);
+		}
 		
 		// CLOSE THE DATASET
 		//ds.close();

@@ -47,9 +47,11 @@ public class DataModelFactory
 	 * Retrieve the model generated from HBase.
 	 * @return
 	 */
-	public static DataModelHBase createHBaseModel()
+	public static Model createHBaseModel()
 	{
-		return null;
+		IDataModel hbase = new DataModelHBase();
+		
+		return hbase.generate();
 	}
 	
 	/**

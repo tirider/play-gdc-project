@@ -24,6 +24,10 @@ public class SparqlEndpoint {
     						"PREFIX owl: <"+OWL.getURI()+"> " +
     						"PREFIX dc: <"+DC.getURI()+"> " +
     						"PREFIX foaf: <"+FOAF.getURI()+"> "+
+    						"PREFIX igeo: <http://rdf.insee.fr/def/geo#>" +
+    						"PREFIX skos: <http://www.w3.org/2004/02/skos/core#>" +
+    						"PREFIX idemo: <http://rdf.insee.fr/def/demo#>" +
+    						"PREFIX trsm: <http://www.tourisme.fr/>" +
     						"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>";
 
         // SPARQL

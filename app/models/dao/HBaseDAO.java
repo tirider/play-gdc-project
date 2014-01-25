@@ -29,7 +29,7 @@ public class HBaseDAO {
 
 	private static final String geo = "http://id.insee.fr/geo/";
 	private static final String igeo = "http://rdf.insee.fr/def/geo#";
-	private static final String trsm = "http://data.gouv.fr/tourism/#";
+	private static final String trsm = "http://www.tourisme.fr/";
 	private static Configuration conf = null;
 	
 	static
@@ -71,28 +71,31 @@ public class HBaseDAO {
 		return list;
 	}
 	
-	public Model getModel() throws Exception {
+	public static Model getModel() {
 		
-		List<Tourisme> list = getDataByTableAndColumnFamily("Tourisme", "2012");
+		List<Tourisme> list = null;
+		
+		try {
+			list = getDataByTableAndColumnFamily("Tourisme", "2012");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		Model m = ModelFactory.createDefaultModel();
 		
 		Property tourismeProp = m.createProperty(igeo + "tourism");
-		Property arriveesProp = m.createProperty(igeo + "arrivees");
-		Property nuiteesProp = m.createProperty(igeo + "nuitees");
-		Property tauxOccupationProp = m.createProperty(igeo + "tauxOccupation");
-		Resource tourisme = m.createResource(trsm + "Tourisme");
+		Property arriveesProp = m.createProperty(trsm + "arrivees");
+		Property nuiteesProp = m.createProperty(trsm + "nuitees");
+		Property tauxOccupationProp = m.createProperty(trsm + "tauxOccupation");
 		
 		for(Tourisme t : list) {
-			// Resource inseeDepartement = m.getResource(geo + "departement/" + t.getCodeDepartement()); GET RESOURCE FROM MODEL CREATED AND ATTACH TOURISM RESOURCE
-			Resource inseeDepartement = m.createResource(geo + "departement/" + t.getCodeDepartement());
+			Resource DepartementTourismeR = m.createResource(trsm + "departement/" + t.getCodeDepartement());
 			Resource tourismR = m.createResource(trsm + t.getCodeDepartement());
 			
-			inseeDepartement.addProperty(tourismeProp, tourismR);
-			tourismR.addProperty(RDF.type, tourisme);
-			tourismR.addProperty(arriveesProp, t.getArrivees());
-			tourismR.addProperty(nuiteesProp, t.getNuitees());
-			tourismR.addProperty(tauxOccupationProp, t.getTauxOccupation());
+			DepartementTourismeR.addProperty(tourismeProp, tourismR);
+			DepartementTourismeR.addProperty(arriveesProp, t.getArrivees());
+			DepartementTourismeR.addProperty(nuiteesProp, t.getNuitees());
+			DepartementTourismeR.addProperty(tauxOccupationProp, t.getTauxOccupation());
 		}
 		
 		return m;

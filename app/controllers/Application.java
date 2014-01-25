@@ -12,6 +12,9 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.ResIterator;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 import models.beans.Region;
 import models.datamodel.DataModelFactory;
@@ -96,7 +99,7 @@ public class Application extends Controller
     	// CHECKING FOR VALID QUERY
     	ResultSet results = SparqlEndpoint.queryData(m, query);
     	if(results == null) {
-    		//return ok(sparqlresults.render("Error on SPARQL query"));
+    		return ok(sparqlresults.render("Error on SPARQL query"));
     	}
 
 		switch(formatInt) {
@@ -138,11 +141,13 @@ public class Application extends Controller
 		//Model d2rq = DataModelFactory.createD2RQModel();
 
 		// RECUPERER LE MODEL DE HBASE
+		Model hbase = DataModelFactory.createHBaseModel();
 		
 		// RECUPERER LE MODEL DE NEO4J
 		
 		// FOUSSIONER DES MODELS -- EXAMPLE
 		global.add(tdb);
+		global.add(hbase);
 		//global.add(d2rq);
 		
 		// GERER LES LIENS ENTRE MODELS
