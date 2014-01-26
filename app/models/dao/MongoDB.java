@@ -12,7 +12,7 @@ import com.mongodb.MongoClient;
 
 public class MongoDB
 {
-	private static final String PROPERTIES_FILE_PATH  = "/app/models/dao/mongodb.properties";
+	private static final String PROPERTIES_FILE_PATH  = "/conf/mongodb.properties";
 	private static String SERVER   = new String();
 	private static int    PORT     = 0;
 	private static String DATABASE = new String();

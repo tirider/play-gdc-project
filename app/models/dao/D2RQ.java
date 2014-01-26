@@ -11,7 +11,7 @@ public class D2RQ
 	/**
 	 * Hols the d2rq mapping file path
 	 */
-	private static final String MAPPING_PATH = Play.application().path() + "/app/models/dao/d2rq-mapping.n3";
+	private static final String MAPPING_PATH = Play.application().path() + "/conf/d2rq-mapping.n3";
 	
 	/**
 	 * Instance class D2RQ.
