@@ -1,1 +1,6 @@
-mongoimport -d gdcproject -c -u gdcprojectuser --type csv --file dephotel2007.csv --headerline -p
+mongoimport -d gdcproject -c hoteldept -u gdcprojectuser --type csv --file dephotel2007.csv --headerline -p gdcprojectpassword
+mongoimport -d gdcproject -c hoteldept -u gdcprojectuser --type csv --file dephotel2008.csv --headerline -p gdcprojectpassword
+mongoimport -d gdcproject -c hoteldept -u gdcprojectuser --type csv --file dephotel2009.csv --headerline -p gdcprojectpassword
+mongoimport -d gdcproject -c hoteldept -u gdcprojectuser --type csv --file dephotel2010.csv --headerline -p gdcprojectpassword
+mongoimport -d gdcproject -c hoteldept -u gdcprojectuser --type csv --file dephotel2011.csv --headerline -p gdcprojectpassword
+mongoimport -d gdcproject -c hoteldept -u gdcprojectuser --type csv --file dephotel2012.csv --headerline -p gdcprojectpassword
