@@ -1,6 +1,7 @@
 package controllers;
  
 import java.io.ByteArrayOutputStream; 
+import java.util.Map;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
@@ -24,6 +25,7 @@ import views.html.index;
 import views.html.sparqlresults;
 import views.html.depttourisme;
 import views.html.map;
+import views.html.namespaceprefixes;
 
 public class Application extends Controller 
 {
@@ -234,5 +236,15 @@ public class Application extends Controller
 				return ok(baosN3.toString());
 		}
 		return null;
+    }
+    
+    public static Result namespaceprefixes()
+    {
+		Model m = launch();
+		Map<String, String> NS = m.getNsPrefixMap();
+		System.out.println(m.getNsURIPrefix("geo"));
+		m.close();
+
+        return ok(namespaceprefixes.render(NS));
     }
 }
