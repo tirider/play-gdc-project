@@ -12,7 +12,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.kernel.impl.util.FileUtils;
 
-import play.api.Play;
+import play.Play;
 
 import models.beans.Geolocalisation; 
 
@@ -21,7 +21,7 @@ public class Neo4jDAO
 	/**
 	 * This file contains data to start neo4j database
 	 */
-	private static String DATA_FILE_PATH = "/public/data/neo4j/geolocalisation.txt";
+	private static String DATA_FILE_PATH = Play.application().path() + "/public/data/neo4j/geolocalisation.txt";
 	private static final String FIELD_1 = "codedep";
 	private static final String FIELD_2 = "lat";
 	private static final String FIELD_3 = "long";
@@ -148,7 +148,7 @@ public class Neo4jDAO
 	 */
 	public void save()
 	{
-		File file = Play.current().getFile(DATA_FILE_PATH);
+		File file = new File(DATA_FILE_PATH);
 		
 		ArrayList<Geolocalisation> list = read(file.getPath());
 		
