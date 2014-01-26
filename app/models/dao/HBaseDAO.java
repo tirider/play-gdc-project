@@ -23,10 +23,10 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import models.beans.Tourisme;
+import models.beans.TourismeANT;
 
-public class HBaseDAO {
-
+public class HBaseDAO 
+{
 	private static final String geo = "http://id.insee.fr/geo/";
 	private static final String igeo = "http://rdf.insee.fr/def/geo#";
 	private static final String trsm = "http://www.tourisme.fr/";
@@ -38,10 +38,10 @@ public class HBaseDAO {
     }
 	
 	@SuppressWarnings("deprecation")
-	public static List<Tourisme> getDataByTableAndColumnFamily(String tableName, String columnFamily) throws IOException
+	public static List<TourismeANT> getDataByTableAndColumnFamily(String tableName, String columnFamily) throws IOException
 	{
-		List<Tourisme> list = new ArrayList<Tourisme>();
-		Tourisme t = null;
+		List<TourismeANT> list = new ArrayList<TourismeANT>();
+		TourismeANT t = null;
 		Filter famFilter = new FamilyFilter(CompareFilter.CompareOp.EQUAL, new BinaryComparator(Bytes.toBytes(columnFamily)));
 	
 		HTable htable = new HTable(conf, tableName);
@@ -49,7 +49,7 @@ public class HBaseDAO {
 	    scan.setFilter(famFilter);
 	    ResultScanner scanner = htable.getScanner(scan);
 	    for (Result result : scanner) {
-	    	t = new Tourisme();
+	    	t = new TourismeANT();
 	    	t.setCodeDepartement(Bytes.toString(result.getRow()));
 	    	for (KeyValue kv : result.raw()) {
 	    		if(Bytes.toString(kv.getQualifier()).equals("Arrivees")) {
@@ -73,7 +73,7 @@ public class HBaseDAO {
 	
 	public static Model getModel() {
 		
-		List<Tourisme> list = null;
+		List<TourismeANT> list = null;
 		
 		try {
 			list = getDataByTableAndColumnFamily("Tourisme", "2012");
@@ -88,7 +88,7 @@ public class HBaseDAO {
 		Property nuiteesProp = m.createProperty(trsm + "nuitees");
 		Property tauxOccupationProp = m.createProperty(trsm + "tauxOccupation");
 		
-		for(Tourisme t : list) {
+		for(TourismeANT t : list) {
 			Resource DepartementTourismeR = m.createResource(trsm + "departement/" + t.getCodeDepartement());
 			Resource tourismR = m.createResource(trsm + t.getCodeDepartement());
 			

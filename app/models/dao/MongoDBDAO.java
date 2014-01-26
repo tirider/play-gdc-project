@@ -10,7 +10,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.WriteResult;
 
-import models.beans.Turisme;
+import models.beans.TourismeHA;
 
 public class MongoDBDAO
 {
@@ -52,7 +52,7 @@ public class MongoDBDAO
 	 * Retrieve rows from mongodb.
 	 * @return
 	 */
-	public List<Turisme> findAll() 
+	public List<TourismeHA> findAll() 
 	{
 		// USE A CONNECTION FROM THE POOL
 		DB db = (DB) this.mdb.getConnection();
@@ -68,7 +68,7 @@ public class MongoDBDAO
 		DBCursor rows = collection.find(searchquery);
 		
 		// OBJECT RECEVEUR DE BEANS UTILISATEUR
-		List<Turisme> deptHotelSets = new ArrayList<Turisme>();
+		List<TourismeHA> deptHotelSets = new ArrayList<TourismeHA>();
 		
 		try
 		{
@@ -78,7 +78,7 @@ public class MongoDBDAO
 				DBObject row = rows.next();
 				
 				// BEANS UTILISATEUR
-				Turisme deptHotel = new Turisme();
+				TourismeHA deptHotel = new TourismeHA();
 				
 				deptHotel.setDepId(toStr(row.get(TABLE_FIELD_1)));
 				deptHotel.setHotel0E(toStr(row.get(TABLE_FIELD_2)));
@@ -110,7 +110,7 @@ public class MongoDBDAO
 	 * @param depId
 	 * @return
 	 */
-	public Turisme find(int depId) 
+	public TourismeHA find(int depId) 
 	{
 		// USE A CONNECTION FROM THE POOL
 		DB db = (DB) this.mdb.getConnection();
@@ -127,7 +127,7 @@ public class MongoDBDAO
 		DBObject row = collection.findOne(searchquery);
 		
 		// INIT USER BEANS
-		Turisme deptHotel = new Turisme();
+		TourismeHA deptHotel = new TourismeHA();
 	
 		try
 		{
@@ -157,7 +157,7 @@ public class MongoDBDAO
 	 * @param dep
 	 * @return
 	 */
-	public boolean save(Turisme dep) 
+	public boolean save(TourismeHA dep) 
 	{
 		// USE A CONNECTION FROM THE POOL
 		DB db = (DB) this.mdb.getConnection();

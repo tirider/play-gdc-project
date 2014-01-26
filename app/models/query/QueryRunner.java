@@ -1,6 +1,6 @@
 package models.query;
  
-import models.beans.Region;
+import models.beans.Geolocalisation;
 
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -21,9 +21,9 @@ public class QueryRunner
 	 * @param regionName
 	 * @return
 	 */
-	public static Region execute(String queryString, String regionName)
+	public static Geolocalisation execute(String queryString, String regionName)
 	{
-		Region region = null;
+		Geolocalisation region = null;
 		
 		String query = String.format(queryString, regionName);
 		
@@ -32,7 +32,7 @@ public class QueryRunner
 
 		for ( ; results.hasNext() ; )
 		{
-			region = new Region();
+			region = new Geolocalisation();
 			
 			QuerySolution qsolution = results.nextSolution() ;
 		    
@@ -42,11 +42,7 @@ public class QueryRunner
 		    String cityLat = result.getString();
 		    
 			result = qsolution.getLiteral(FIELD2) ;
-		    String cityLong = result.getString();		    
-
-		    region.setName(regionName);
-		    region.setLatitude(cityLat);
-		    region.setLogitude(cityLong);
+		    String cityLong = result.getString();
 		}
 		return  region;
 	}

@@ -58,8 +58,10 @@ public class DataModelFactory
 	 * Retrieve the model generated from Neo4j.
 	 * @return
 	 */
-	public static DataModelNeo4j createNeo4jModel()
+	public static Model createNeo4jModel()
 	{
-		return null;
+		IDataModel neo4jModel = new DataModelNeo4j();
+				
+		return neo4jModel.generate();
 	}
 }

@@ -1,6 +1,6 @@
 package models.service;
 
-import models.beans.Region;
+import models.beans.Geolocalisation;
 import models.query.QueryStringProvider;
 import models.query.QueryRunner;
 
@@ -11,7 +11,7 @@ public class DBPediaService
 	 * @param regionName
 	 * @return
 	 */
-	public static Region parse(String regionName)
+	public static Geolocalisation parse(String regionName)
 	{
 		// CHECKS WHETHER THE DESTINATION IS A CITY
 		if(QueryRunner.exists(QueryStringProvider.ASK, regionName))

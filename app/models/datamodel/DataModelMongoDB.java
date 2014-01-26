@@ -1,7 +1,7 @@
 package models.datamodel;
 
  
-import models.beans.Turisme;
+import models.beans.TourismeHA;
 import models.dao.MongoDBDAO;
 import models.dao.MongoDB;
 
@@ -44,13 +44,13 @@ public class DataModelMongoDB implements IDataModel
 		RDFDatatype yearType = XSDYearType.XSDgYear;
 		
 		// PARCOURS POUR AJOUTER TOUS LES VALEURS DE LA BD AU MODEL
-		for(Turisme dh : mdh.findAll())
+		for(TourismeHA dh : mdh.findAll())
 		{
 			// ASSURER QUE LE RDF GARDER QUE DES LITERALES NON ZERO
 			if(!dh.getDepId().isEmpty())
 			{
-				// ON DIT QUE CHAQUE ID DE DEP. DANS TOURISME EST UNE RESOURCE 
-				Resource resource = model.createResource(ns+"departement/"+dh.getDepId());
+				// ON DIT QUE CHAQUE ID DE DEP.+L'ANNEE DANS TOURISME SONT DES RESOURCES
+				Resource resource = model.createResource(ns+"departement/"+dh.getDepId()+"/"+dh.getYear());
 				
 				if(!dh.getHotel0E().isEmpty())
 					model.add(resource, hasHotel0e, dh.getHotel0E(), numericType);

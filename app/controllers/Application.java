@@ -1,27 +1,16 @@
 package controllers;
  
 import java.io.ByteArrayOutputStream; 
-import java.util.Date;
 
-import com.hp.hpl.jena.n3.turtle.parser.ParseException;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.ResIterator;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.RDF;
 
-import models.beans.Region;
+import models.beans.Geolocalisation;
 import models.datamodel.DataModelFactory;
 import models.endpoint.SparqlEndpoint;
 import models.global.Core;
-import models.query.QueryRunner; 
-import models.service.DBPediaService;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
@@ -29,7 +18,6 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
 import views.html.sparqlresults;
-import views.html.results;
 
 public class Application extends Controller 
 {
@@ -48,23 +36,29 @@ public class Application extends Controller
 		// MODEL GENERAL
 		Model global = ModelFactory.createDefaultModel();
 		
-		// RECUPERER LE MODEL DE MONGODB
-		//Model mongodb = DataModelFactory.createMongoModel();
+//		// RECUPERER LE MODEL DE TDB
+//		Model tdb = DataModelFactory.createTDBModel();
+//		
+//		// RECUPERER LE MODEL DE MONGODB
+//		Model mongodb = DataModelFactory.createMongoModel();
 
-		// RECUPERER LE MODEL DE TDB
-		Model tdb = DataModelFactory.createTDBModel();
-		
 		// RECUPERER LE MODEL DE D2RQ
 		//Model d2rq = DataModelFactory.createD2RQModel();
 
 		// RECUPERER LE MODEL DE HBASE
-		Model hbase = DataModelFactory.createHBaseModel();
+		//Model hbase = DataModelFactory.createHBaseModel();
+		
+		// RECUPERER LE MODEL DE NEO4J
+		Model neo4j = DataModelFactory.createNeo4jModel();
 		
 		// RECUPERER LE MODEL DE NEO4J
 		
 		// FOUSSIONER DES MODELS -- EXAMPLE
-		global.add(tdb);
-		global.add(hbase);
+//		global.add(tdb);
+//		//global.add(hbase);
+//		global.add(mongodb);
+		global.add(neo4j);
+		
 		//global.add(d2rq);
 		
 		// GERER LES LIENS ENTRE MODELS
@@ -84,7 +78,7 @@ public class Application extends Controller
 		// FERMETURE TOUS LES REFERENCES
 		//d2rq.close();
 		//mongodb.close();
-		tdb.close();
+//		tdb.close();
 		//global.close();
 		
 		return global;
@@ -92,13 +86,13 @@ public class Application extends Controller
 	
     /**
      * This method provide access to the result page.
-     * @param regionName
+     * @param codeDept
      * @return
      */
-    public static Result results(String regionName)
+    public static Result results(String codeDept)
     {
-        Region region = new Region();
-        region.setName(regionName);
+        Geolocalisation depGeoInfo = new Geolocalisation();
+        depGeoInfo.setCodedep(Integer.parseInt(codeDept));
         
 		return ok();
     }

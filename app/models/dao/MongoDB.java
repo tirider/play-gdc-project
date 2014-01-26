@@ -1,15 +1,18 @@
 package models.dao;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.File; 
+import java.io.FileReader;
+import java.io.IOException; 
 import java.util.Properties;
+
+import play.api.Play; 
 
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 
 public class MongoDB
 {
-	private static final String PROPERTIES_FILE_PATH  = "dao/mongodb/mongodb.properties";
+	private static final String PROPERTIES_FILE_PATH  = "/app/models/dao/mongodb.properties";
 	private static String SERVER   = new String();
 	private static int    PORT     = 0;
 	private static String DATABASE = new String();
@@ -35,14 +38,17 @@ public class MongoDB
 			{
 				System.err.println("Erreur lorsqu'on établie une connexion à la base de données ! "+e.getMessage());
 			}
-		}		
+		}	
+		else System.err.println("Not property file found");
 	}
 	
 	// THIS METHOD IS A REDEFICNITION
 	public static MongoDB getInstance() 
 	{
 		if(mongo == null)
+		{	
 			return new MongoDB();
+		}
 		return mongo;
 	}
 	
@@ -60,7 +66,7 @@ public class MongoDB
 			{
 				System.out.println("Error trying to authenticate into the database "+e.getMessage());
 			}
-			if(authentication) return mongoDB;
+			if(authentication){ return mongoDB; }
 		}
 		return null;
 	}
@@ -68,24 +74,29 @@ public class MongoDB
 	// THIS METHOD ATTEMPT TO LOAD A FILE HOLDING THE DATABSE CONNECTION CREDENTIALS
 	private boolean propertiesLoader()
 	{
+		boolean connected = false;
+		
 		// PRE-TRAITEMENT
 		Properties properties = new Properties();
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		InputStream propertiesFile = loader.getResourceAsStream(PROPERTIES_FILE_PATH);
-
+		File file = Play.current().getFile(PROPERTIES_FILE_PATH);
+		FileReader fr = null;
+		
 		try 
 		{
+			// READING PROPERTIES FILE
+			fr = new java.io.FileReader(file);
+			
 			try
 			{
-				properties.load(propertiesFile);
+				properties.load(fr);
 				
 				SERVER   = properties.getProperty("server");
 				PORT     = Integer.parseInt(properties.getProperty("port"));
 				DATABASE = properties.getProperty("database");
 				USERNAME = properties.getProperty("username");
 				PASSWORD = properties.getProperty("password");
-				
-				return true;
+
+				connected = true;
 			}
 			catch(IOException e)
 			{
@@ -95,7 +106,12 @@ public class MongoDB
 		{
 			System.err.println(e.getMessage());
 		}
+		finally
+		{
+			try { fr.close(); }
+			catch (IOException e)  { e.printStackTrace(); }
+		}
 		
-		return false;
+		return connected;
 	}	
 }
