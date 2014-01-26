@@ -95,20 +95,20 @@ public class TDBDatasetDAO
         geoInsee.add(igeoPays, OWL.equivalentClass, apcli);
         geoInsee.add(apcli, OWL.equivalentClass, igeoPays);
         
-        Resource DepartementR = geoInsee.getResource(igeoNS + "Departement"); // Class Resource
-        Property tourismeProp = geoInsee.createProperty(trsm + "info"); // Propriete pour lier la Resource du Departement Insee a la resource Tourisme
-        Property codeDepartementProp = geoInsee.getProperty(igeoNS + "codeDepartement"); // Recuperer le code de departement pour creer la resource de Tourisme
-        Resource TourismeClass = geoInsee.createResource(igeoNS + "Tourisme"); // Creer la class Tourisme
-        
-        // AJOUTER DANS CHAQUE DEPARTEMENT LA PROPRIETE AVEC LA RESOURCE DE TOURISME
-		ResIterator res_i = geoInsee.listSubjectsWithProperty(RDF.type, DepartementR);
-		while (res_i.hasNext())
-		{
-			Resource r = res_i.nextResource();
-			Resource DepartementTourismeR = geoInsee.createResource(trsm + "departement/" + r.getProperty(codeDepartementProp).getLiteral());
-			r.addProperty(tourismeProp, DepartementTourismeR);
-			DepartementTourismeR.addProperty(RDF.type, TourismeClass);
-		}
+//        Resource DepartementR = geoInsee.getResource(igeoNS + "Departement"); // Class Resource
+//        Property tourismeProp = geoInsee.createProperty(trsm + "info"); // Propriete pour lier la Resource du Departement Insee a la resource Tourisme
+//        Property codeDepartementProp = geoInsee.getProperty(igeoNS + "codeDepartement"); // Recuperer le code de departement pour creer la resource de Tourisme
+//        Resource TourismeClass = geoInsee.createResource(igeoNS + "Tourisme"); // Creer la class Tourisme
+//        
+//        // AJOUTER DANS CHAQUE DEPARTEMENT LA PROPRIETE AVEC LA RESOURCE DE TOURISME
+//		ResIterator res_i = geoInsee.listSubjectsWithProperty(RDF.type, DepartementR);
+//		while (res_i.hasNext())
+//		{
+//			Resource r = res_i.nextResource();
+//			Resource DepartementTourismeR = geoInsee.createResource(trsm + "departement/" + r.getProperty(codeDepartementProp).getLiteral());
+//			r.addProperty(tourismeProp, DepartementTourismeR);
+//			DepartementTourismeR.addProperty(RDF.type, TourismeClass);
+//		}
 		
 		// CLOSE THE DATASET
 		//ds.close();

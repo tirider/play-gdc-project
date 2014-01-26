@@ -2,12 +2,16 @@ package controllers;
  
 import java.io.ByteArrayOutputStream; 
 
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
+import models.beans.Department;
 import models.beans.Geolocalisation;
+import models.beans.TourismeANT;
+import models.beans.TourismeHA;
 import models.datamodel.DataModelFactory;
 import models.endpoint.SparqlEndpoint;
 import models.global.Core;
@@ -18,6 +22,8 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
 import views.html.sparqlresults;
+import views.html.depttourisme;
+import views.html.map;
 
 public class Application extends Controller 
 {
@@ -37,27 +43,27 @@ public class Application extends Controller
 		Model global = ModelFactory.createDefaultModel();
 		
 //		// RECUPERER LE MODEL DE TDB
-//		Model tdb = DataModelFactory.createTDBModel();
+		Model tdb = DataModelFactory.createTDBModel();
 //		
 //		// RECUPERER LE MODEL DE MONGODB
-//		Model mongodb = DataModelFactory.createMongoModel();
+		Model mongodb = DataModelFactory.createMongoModel();
 
 		// RECUPERER LE MODEL DE D2RQ
 		//Model d2rq = DataModelFactory.createD2RQModel();
 
 		// RECUPERER LE MODEL DE HBASE
-		//Model hbase = DataModelFactory.createHBaseModel();
+		Model hbase = DataModelFactory.createHBaseModel();
 		
 		// RECUPERER LE MODEL DE NEO4J
-		Model neo4j = DataModelFactory.createNeo4jModel();
+		//Model neo4j = DataModelFactory.createNeo4jModel();
 		
 		// RECUPERER LE MODEL DE NEO4J
 		
 		// FOUSSIONER DES MODELS -- EXAMPLE
-//		global.add(tdb);
-//		//global.add(hbase);
-//		global.add(mongodb);
-		global.add(neo4j);
+		global.add(tdb);
+		global.add(hbase);
+		global.add(mongodb);
+		//global.add(neo4j);
 		
 		//global.add(d2rq);
 		
@@ -77,8 +83,9 @@ public class Application extends Controller
 		
 		// FERMETURE TOUS LES REFERENCES
 		//d2rq.close();
-		//mongodb.close();
-//		tdb.close();
+		mongodb.close();
+		tdb.close();
+		hbase.close();
 		//global.close();
 		
 		return global;
@@ -89,12 +96,74 @@ public class Application extends Controller
      * @param codeDept
      * @return
      */
-    public static Result results(String codeDept)
+    public static Result map()
     {
-        Geolocalisation depGeoInfo = new Geolocalisation();
-        depGeoInfo.setCodedep(codeDept);
-        
+
 		return ok();
+    }
+    
+    /**
+     * This method provide access tourism department page
+     * @param codeDept
+     * @return
+     */
+    public static Result depttourisme(String codedep, String year)
+    {
+    	Geolocalisation depGeoInfo = new Geolocalisation();
+    	TourismeANT tourismeANT = new TourismeANT();
+    	TourismeHA tourismeHA = new TourismeHA();
+    	Department departement = new Department();
+        
+    	String query = "SELECT ?nomDepartement ?label ?pop ?arrivees ?nuitees ?tauxOccupation ?date WHERE { "
+	    			+ "?resourceDepartement rdf:type igeo:Departement . "
+	    			+ "?resourceDepartement igeo:nom ?nomDepartement . "
+	    			+ "?resourceDepartement igeo:codeDepartement ?codeDepartement . "
+					+ "igeo:Departement ?p ?o . "
+					+ "?o skos:definition ?label . "
+					+ "?resourceDepartement idemo:population ?resourcePopulation . "
+					+ "?resourcePopulation idemo:populationTotale ?pop . "
+					+ "?resourceDepartement trsm:info ?resourceTourismeDepartement . "
+					+ "?resourceTourismeDepartement trsm:arrivees ?arrivees . "
+					+ "?resourceTourismeDepartement trsm:nuitees ?nuitees . "
+					+ "?resourceTourismeDepartement trsm:tauxOccupation ?tauxOccupation . "
+					+ "?resourceTourismeDepartement dc:date ?date "
+					+ "FILTER (lang(?label) = 'en' && ?date = \"" + year + "\" && ?codeDepartement = \"" + codedep + "\") "
+					+"}";
+    	
+    	Model m = launch();
+    	ResultSet results = SparqlEndpoint.queryData(m, query);
+    	
+    	for ( ; results.hasNext() ; )
+		{
+			QuerySolution qsolution = results.nextSolution();
+	
+			if(qsolution.contains("nomDepartement")) {
+				departement.setName(qsolution.getLiteral("nomDepartement").toString());
+			}
+			if(qsolution.contains("label")) {
+				departement.setLabelGeonames(qsolution.getLiteral("label").toString());
+			}
+
+			if(qsolution.contains("pop")) {
+				departement.setPopulation(qsolution.getLiteral("pop").getInt());
+			}
+			
+			if(qsolution.contains("arrivees")) {
+				tourismeANT.setArrivees(qsolution.getLiteral("arrivees").toString());
+			}
+			
+			if(qsolution.contains("nuitees")) {
+				tourismeANT.setNuitees(qsolution.getLiteral("nuitees").toString());
+			}
+			
+			if(qsolution.contains("tauxOccupation")) {
+				tourismeANT.setTauxOccupation(qsolution.getLiteral("tauxOccupation").toString());
+			}
+		}
+    	
+    	departement.setTourismeant(tourismeANT);
+        
+		return ok(depttourisme.render(departement, year));
     }
     
     /**

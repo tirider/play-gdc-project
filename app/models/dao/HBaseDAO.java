@@ -21,6 +21,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import models.beans.TourismeANT;
@@ -73,29 +74,37 @@ public class HBaseDAO
 	
 	public static Model getModel() {
 		
-		List<TourismeANT> list = null;
-		
-		try {
-			list = getDataByTableAndColumnFamily("Tourisme", "2012");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 		Model m = ModelFactory.createDefaultModel();
-		
 		Property tourismeProp = m.createProperty(igeo + "tourism");
 		Property arriveesProp = m.createProperty(trsm + "arrivees");
 		Property nuiteesProp = m.createProperty(trsm + "nuitees");
 		Property tauxOccupationProp = m.createProperty(trsm + "tauxOccupation");
+		List<TourismeANT> list = null;
 		
-		for(TourismeANT t : list) {
-			Resource DepartementTourismeR = m.createResource(trsm + "departement/" + t.getCodeDepartement());
-			Resource tourismR = m.createResource(trsm + t.getCodeDepartement());
-			
-			DepartementTourismeR.addProperty(tourismeProp, tourismR);
-			DepartementTourismeR.addProperty(arriveesProp, t.getArrivees());
-			DepartementTourismeR.addProperty(nuiteesProp, t.getNuitees());
-			DepartementTourismeR.addProperty(tauxOccupationProp, t.getTauxOccupation());
+        Property tourismeInfoProp = m.createProperty(trsm + "info"); // Propriete pour lier la Resource du Departement Insee a la resource Tourisme
+        Resource TourismeClass = m.createResource(igeo + "Tourisme"); // Creer la class Tourisme
+		
+		String[] years = new String[] { "2007", "2008", "2009", "2010", "2011", "2012" };
+		
+		for(String y : years)
+		{
+			try {
+				list = getDataByTableAndColumnFamily("Tourisme", y);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	
+			for(TourismeANT t : list) {
+				Resource DepartementInseeR = m.createResource(geo + "departement/" + t.getCodeDepartement());
+				Resource DepartementTourismeR = m.createResource(trsm + "departement/" + t.getCodeDepartement() + "/" + y);
+				DepartementInseeR.addProperty(tourismeInfoProp, DepartementTourismeR);
+				
+				DepartementTourismeR.addProperty(RDF.type, TourismeClass);
+				DepartementTourismeR.addProperty(arriveesProp, t.getArrivees());
+				DepartementTourismeR.addProperty(nuiteesProp, t.getNuitees());
+				DepartementTourismeR.addProperty(tauxOccupationProp, t.getTauxOccupation());
+				DepartementTourismeR.addProperty(DC.date, y);
+			}
 		}
 		
 		return m;
