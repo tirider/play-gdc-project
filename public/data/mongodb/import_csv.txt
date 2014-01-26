@@ -1,0 +1,1 @@
+mongoimport -d gdcproject -c -u gdcprojectuser --type csv --file dephotel2007.csv --headerline -p
