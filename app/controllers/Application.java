@@ -92,7 +92,7 @@ public class Application extends Controller
     public static Result results(String codeDept)
     {
         Geolocalisation depGeoInfo = new Geolocalisation();
-        depGeoInfo.setCodedep(Integer.parseInt(codeDept));
+        depGeoInfo.setCodedep(codeDept);
         
 		return ok();
     }

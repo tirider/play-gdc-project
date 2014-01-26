@@ -3,23 +3,23 @@ package models.beans;
 public class Geolocalisation 
 {
 	private String name;
-	private int codedep;    
+	private String codedep;    
 	private double latitude; 
 	private double longitude;    
 	
 	public Geolocalisation() 
 	{
 		this.name = new String("Departement");
-		this.codedep  = 0;
+		this.codedep  = new String("");;
 		this.latitude = 0.0;
 		this.longitude = 0.0;
 	}
 
-	public int getCodedep() {
+	public String getCodedep() {
 		return codedep;
 	}
 
-	public void setCodedep(int codedep) {
+	public void setCodedep(String codedep) {
 		this.codedep = codedep;
 	}
 
