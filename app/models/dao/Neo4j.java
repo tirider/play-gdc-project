@@ -2,6 +2,7 @@ package models.dao;
  
 import org.neo4j.graphdb.GraphDatabaseService; 
 import org.neo4j.graphdb.factory.GraphDatabaseFactory; 
+
 import play.Play;
 
 public class Neo4j 
@@ -9,7 +10,7 @@ public class Neo4j
 	/**
 	 * Neo4j data base path
 	 */
-	private static final String NEO4J_GRAPH_PATH = Play.application().path()+"/public/data/neo4j/graph.db";
+	private static final String NEO4J_GRAPH_PATH = Play.application().path() + "/public/data/neo4j/graph.db";
 	
 	/**
 	 * Neo4j singleton instance
@@ -26,7 +27,7 @@ public class Neo4j
      */
     private Neo4j() 
     {
-        graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(NEO4J_GRAPH_PATH);    	
+        graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(NEO4J_GRAPH_PATH);
     }
     
     /**
