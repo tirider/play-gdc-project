@@ -187,7 +187,7 @@ public class Neo4jDAO
 	    				StringTokenizer tokens = new StringTokenizer(line);
 	    				
 	    				// GETTING TOKENS
-	    				depGeoInfo.setCodedep(Integer.parseInt(tokens.nextToken()));
+	    				depGeoInfo.setCodedep(tokens.nextToken());
 	    				depGeoInfo.setLatitude(Float.parseFloat(tokens.nextToken()));
 	    				depGeoInfo.setLongitude(Float.parseFloat(tokens.nextToken()));
 	    				
