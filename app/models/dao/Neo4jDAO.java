@@ -12,16 +12,15 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.kernel.impl.util.FileUtils;
 
-import play.Play;
-
 import models.beans.Geolocalisation; 
+import play.Play;
 
 public class Neo4jDAO 
 {
 	/**
 	 * This file contains data to start neo4j database
 	 */
-	private static String DATA_FILE_PATH = Play.application().path() + "/public/data/neo4j/geolocalisation.txt";
+	private static String DATA_FILE_PATH = Play.application().path()+"/public/data/neo4j/geolocalisation.txt";
 	private static final String FIELD_1 = "codedep";
 	private static final String FIELD_2 = "lat";
 	private static final String FIELD_3 = "long";
