@@ -33,7 +33,8 @@ public class TDBDatasetDAO
 		
 		// GET ALL MODELS FROM DATASET
 		Model geoInsee = ds.getNamedModel("geoInsee");
-        Model popInsee = ds.getNamedModel("popInsee");
+        Model popInsee2011 = ds.getNamedModel("popInsee2011");
+        Model popInsee2010 = ds.getNamedModel("popInsee2010");
         Model geonames = ds.getNamedModel("geonames");
 
         // GET NAMESPACES FROM MODELS
@@ -51,7 +52,7 @@ public class TDBDatasetDAO
     	geoInsee.setNsPrefix("trsm", trsm);
 
         // MERGE GRAPHS
-    	geoInsee.add(popInsee).add(geonames);
+    	geoInsee.add(popInsee2011).add(popInsee2010).add(geonames);
 
         // ASSOCIATE REGION - ADM1
         Resource igeoRegion = geoInsee.getResource(igeoNS + "Region");
