@@ -1,5 +1,5 @@
 package models.dao;
- 
+   
 import org.neo4j.graphdb.GraphDatabaseService; 
 import org.neo4j.graphdb.factory.GraphDatabaseFactory; 
 
@@ -20,14 +20,14 @@ public class Neo4j
 	/**
 	 * Neo4j graph holder
 	 */
-    private static GraphDatabaseService graphDb = null;
+    private GraphDatabaseService graphDb = null;
     
     /**
      * Default constructor
      */
     private Neo4j() 
     {
-        graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(NEO4J_GRAPH_PATH);
+        graphDb = null;//new GraphDatabaseFactory().newEmbeddedDatabase(NEO4J_GRAPH_PATH);
     }
     
     /**
@@ -38,7 +38,17 @@ public class Neo4j
     public static Neo4j getInstance()
     {
     	if(instance == null)
-    		return new Neo4j();
+    	{
+			synchronized(Neo4j.class)
+			{
+				if (instance == null)
+				{
+		    		System.out.println("Oui une instance est crée");
+		    		return new Neo4j();
+				}
+			} 
+    	}
+    	System.out.println("Non une instance est crée");
     	return instance;
     }
     
@@ -50,4 +60,19 @@ public class Neo4j
     {
     	return graphDb;
     }
+    
+    /**
+     * This method delete all datas into neo4j database
+     */
+    /*private void restartDataBase()
+    {
+        try
+        {
+            FileUtils.cleanDirectory(new File(Play.application().path()+"/public/data/neo4j/graph.db"));
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException( e );
+        }
+    }    */
 }

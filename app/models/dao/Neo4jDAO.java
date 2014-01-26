@@ -1,16 +1,16 @@
 package models.dao;
 
 import java.io.File;
-import java.io.FileNotFoundException;  
-import java.io.IOException;
+import java.io.FileNotFoundException;   
 import java.util.ArrayList; 
 import java.util.Scanner;
 import java.util.StringTokenizer;
-
+ 
+import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.kernel.impl.util.FileUtils;
+import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 import models.beans.Geolocalisation; 
 import play.Play;
@@ -21,14 +21,25 @@ public class Neo4jDAO
 	 * This file contains data to start neo4j database
 	 */
 	private static String DATA_FILE_PATH = Play.application().path()+"/public/data/neo4j/geolocalisation.txt";
-	private static final String FIELD_1 = "codedep";
-	private static final String FIELD_2 = "lat";
-	private static final String FIELD_3 = "long";
+	
+	private static final String NEO4J_GRAPH_PATH = Play.application().path() + "/public/data/neo4j/graph.db";
+	
+	/**
+	 * Holds mongodb table name.
+	 */
+	private static final String DYNAMIC_LABEL = "Geolocalisation";
+	
+	private static final String FIELD_1    = "codedep";
+	private static final String FIELD_2    = "lat";
+	private static final String FIELD_3    = "long";
+	
 	/**
 	 * Neo4j singleton instance
 	 */
-	private Neo4j neo4jgraph = null;
+	private Neo4j neo4jgraph ;
 	
+	private static GraphDatabaseService graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(NEO4J_GRAPH_PATH);
+
 	/**
 	 * Constructor with params
 	 * @param neo4j
@@ -38,6 +49,54 @@ public class Neo4jDAO
 		this.neo4jgraph = neo4j;
 	}
     
+	/**
+	 * This method returns all data from neo4j
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	public ArrayList<Geolocalisation> getAll()
+	{
+    	// GET ALL DATA FROM FILE
+    	ArrayList<Geolocalisation> list = new ArrayList<Geolocalisation>();
+    			
+    	GraphDatabaseService graph = graphDb;
+    			
+        // START SNIPPET: transaction
+        try ( Transaction tx = graph.beginTx())
+        {
+        	System.out.println("Reading data from neo4j database...");
+        	
+        	Iterable<Node> in = graph.getAllNodes();
+        	// for (Node n : GlobalGraphOperations.at(db).getAllNodes()) 
+            // ExecutionEngine engine = new ExecutionEngine( db );
+            // ExecutionResult result;
+            
+        	Geolocalisation geo = new Geolocalisation();
+        	
+        	for(Node n : in)
+        	{
+        		geo = new Geolocalisation();
+        		
+        		String codedep   = (String)n.getProperty("codedep");
+        		float latitude  = (Float)n.getProperty("lat");
+        		float longitude = (Float)n.getProperty("long");
+        		
+        		geo.setCodedep(codedep);
+        		geo.setLatitude(latitude);
+        		geo.setLongitude(longitude);
+        		
+        		list.add(geo);
+        	}
+        	
+        	// EXEC TRANSACTION
+        	tx.success();
+        }
+        
+        registerShutdownHook(graph);	
+        
+		return list;
+	}
+	
     /**
      * Start database
      */
@@ -48,72 +107,31 @@ public class Neo4jDAO
     	
     	if(!list.isEmpty())
     	{
-    		// GETTING GRAPH INSTANCE
-	    	GraphDatabaseService graph = neo4jgraph.getGraph();
-	
-	    	// IN CASE ALREADY DONE
-	    	clearDb();
-	
+    		GraphDatabaseService graph = graphDb;
+    		
 	        // START SNIPPET: transaction
 	        try ( Transaction tx = graph.beginTx())
 	        {
+	        	System.out.println("Starting neo4j database...");
 	        	for(Geolocalisation geo : list)
 	        	{
 		        	Node node = null;
 		        	
 		        	node = graph.createNode();
+		        	node.addLabel(DynamicLabel.label(DYNAMIC_LABEL));
 		        	node.setProperty(FIELD_1, geo.getCodedep());
 		        	node.setProperty(FIELD_2, geo.getLatitude());
 		        	node.setProperty(FIELD_3, geo.getLongitude());
+	        	
+		        	// EXEC TRANSACTION
+		        	tx.success();
 	        	}
-	            // START SNIPPET: transaction
-	            tx.success();
 	        }
-	        
-	        // CLOSING
+	       
 	        registerShutdownHook(graph);
     	}
-    	else System.err.println("Not operations");
+    	else System.err.println("Not operations (on neo4jdb database)...");
     }  
-    
-    /**
-     * This method removes data from neo4j graph
-     */
-    void removeData()
-    {
-        try ( Transaction tx = neo4jgraph.getGraph().beginTx() )
-        {
-            // let's remove the data
-            // node.getSingleRelationship( RelTypes.KNOWS, Direction.OUTGOING ).delete();
-            // node.delete();
-
-            tx.success();
-        }
-    }    
-    
-    /**
-     * This method delete all datas into neo4j database
-     */
-    private void clearDb()
-    {
-        try
-        {
-            FileUtils.deleteRecursively(new File("/public/data/neo4j/graph.db"));
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException( e );
-        }
-    }
-
-    /**
-     * Shut down the neo4j database
-     */
-    void shutDown()
-    {
-        System.out.println( "Shutting down database ..." );
-        neo4jgraph.getGraph().shutdown();
-    }
     
     /**
      * Registers a shutdown hook for the neo4j instance so that it
@@ -133,28 +151,6 @@ public class Neo4jDAO
         } );
     }
     
-	/**
-	 * This method returns all data from neo4j
-	 * @return
-	 */
-	public ArrayList<Geolocalisation> getAll()
-	{
-		return null;
-	}
-	
-	/**
-	 * This function save data into neo4j graph
-	 */
-	public void save()
-	{
-		File file = new File(DATA_FILE_PATH);
-		
-		ArrayList<Geolocalisation> list = read(file.getPath());
-		
-		// AFFICHAGE DU CONTENU
-		for(Geolocalisation s : list) System.out.println(s);
-	}
-	
 	/**
 	 * This method read commun .txt file
 	 * @param filePathName

@@ -11,6 +11,7 @@ import models.beans.Geolocalisation;
 import models.datamodel.DataModelFactory;
 import models.endpoint.SparqlEndpoint;
 import models.global.Core;
+import models.query.URI;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
@@ -56,7 +57,7 @@ public class Application extends Controller
 		// FOUSSIONER DES MODELS -- EXAMPLE
 //		global.add(tdb);
 //		//global.add(hbase);
-//		global.add(mongodb);
+		//global.add(mongodb);
 		global.add(neo4j);
 		
 		//global.add(d2rq);

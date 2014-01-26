@@ -5,7 +5,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 public class DataModelFactory 
 {
 	/**
-	 * Retrieve the model generated from mongodb.
+	 * Retrieve the model generated from mongodb
 	 * @return
 	 */
 	public static Model createMongoModel()
@@ -18,7 +18,7 @@ public class DataModelFactory
 	}
 	
 	/**
-	 * Retrieve the model generated from TDB.
+	 * Retrieve the model generated from TDB
 	 * @return
 	 */
 	public static Model createTDBModel()

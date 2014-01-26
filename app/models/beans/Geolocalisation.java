@@ -4,15 +4,15 @@ public class Geolocalisation
 {
 	private String name;
 	private String codedep;    
-	private double latitude; 
-	private double longitude;    
+	private float latitude; 
+	private float longitude;    
 	
 	public Geolocalisation() 
 	{
 		this.name = new String("Departement");
 		this.codedep  = new String("");;
-		this.latitude = 0.0;
-		this.longitude = 0.0;
+		this.latitude = 0;
+		this.longitude = 0;
 	}
 
 	public String getCodedep() {
@@ -23,19 +23,19 @@ public class Geolocalisation
 		this.codedep = codedep;
 	}
 
-	public double getLatitude() {
+	public float getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(double latitude) {
+	public void setLatitude(float latitude) {
 		this.latitude = latitude;
 	}
 
-	public double getLongitude() {
+	public float getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(double longitude) {
+	public void setLongitude(float longitude) {
 		this.longitude = longitude;
 	}
 
@@ -46,5 +46,4 @@ public class Geolocalisation
 	public void setName(String name) {
 		this.name = name;
 	}
-	
 }
