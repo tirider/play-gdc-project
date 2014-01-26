@@ -33,7 +33,8 @@ public class TDBDatasetDAO
 		
 		// GET ALL MODELS FROM DATASET
 		Model geoInsee = ds.getNamedModel("geoInsee");
-        Model popInsee = ds.getNamedModel("popInsee");
+        Model popInsee2011 = ds.getNamedModel("popInsee2011");
+        Model popInsee2010 = ds.getNamedModel("popInsee2010");
         Model geonames = ds.getNamedModel("geonames");
 
         // GET NAMESPACES FROM MODELS
@@ -51,7 +52,7 @@ public class TDBDatasetDAO
     	geoInsee.setNsPrefix("trsm", trsm);
 
         // MERGE GRAPHS
-    	geoInsee.add(popInsee).add(geonames);
+    	geoInsee.add(popInsee2011).add(popInsee2010).add(geonames);
 
         // ASSOCIATE REGION - ADM1
         Resource igeoRegion = geoInsee.getResource(igeoNS + "Region");
@@ -95,20 +96,20 @@ public class TDBDatasetDAO
         geoInsee.add(igeoPays, OWL.equivalentClass, apcli);
         geoInsee.add(apcli, OWL.equivalentClass, igeoPays);
         
-        Resource DepartementR = geoInsee.getResource(igeoNS + "Departement"); // Class Resource
-        Property tourismeProp = geoInsee.createProperty(trsm + "info"); // Propriete pour lier la Resource du Departement Insee a la resource Tourisme
-        Property codeDepartementProp = geoInsee.getProperty(igeoNS + "codeDepartement"); // Recuperer le code de departement pour creer la resource de Tourisme
-        Resource TourismeClass = geoInsee.createResource(igeoNS + "Tourisme"); // Creer la class Tourisme
-        
-        // AJOUTER DANS CHAQUE DEPARTEMENT LA PROPRIETE AVEC LA RESOURCE DE TOURISME
-		ResIterator res_i = geoInsee.listSubjectsWithProperty(RDF.type, DepartementR);
-		while (res_i.hasNext())
-		{
-			Resource r = res_i.nextResource();
-			Resource DepartementTourismeR = geoInsee.createResource(trsm + "departement/" + r.getProperty(codeDepartementProp).getLiteral());
-			r.addProperty(tourismeProp, DepartementTourismeR);
-			DepartementTourismeR.addProperty(RDF.type, TourismeClass);
-		}
+//        Resource DepartementR = geoInsee.getResource(igeoNS + "Departement"); // Class Resource
+//        Property tourismeProp = geoInsee.createProperty(trsm + "info"); // Propriete pour lier la Resource du Departement Insee a la resource Tourisme
+//        Property codeDepartementProp = geoInsee.getProperty(igeoNS + "codeDepartement"); // Recuperer le code de departement pour creer la resource de Tourisme
+//        Resource TourismeClass = geoInsee.createResource(igeoNS + "Tourisme"); // Creer la class Tourisme
+//        
+//        // AJOUTER DANS CHAQUE DEPARTEMENT LA PROPRIETE AVEC LA RESOURCE DE TOURISME
+//		ResIterator res_i = geoInsee.listSubjectsWithProperty(RDF.type, DepartementR);
+//		while (res_i.hasNext())
+//		{
+//			Resource r = res_i.nextResource();
+//			Resource DepartementTourismeR = geoInsee.createResource(trsm + "departement/" + r.getProperty(codeDepartementProp).getLiteral());
+//			r.addProperty(tourismeProp, DepartementTourismeR);
+//			DepartementTourismeR.addProperty(RDF.type, TourismeClass);
+//		}
 		
 		// CLOSE THE DATASET
 		//ds.close();

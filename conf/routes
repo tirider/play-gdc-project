@@ -4,9 +4,10 @@
 
 # PROJECT ROUTES
 GET     /                               				controllers.Application.index()
-GET     /results/:regionName                            controllers.Application.results(regionName: String)
-GET     /sparql                                   controllers.Application.sparqlresults()
-#GET    /namespaceprefixes                              controllers.Application.namespaceprefixes()
+GET     /map                                            controllers.Application.map
+GET     /sparql                                         controllers.Application.sparqlresults()
+GET     /namespaceprefixes                              controllers.Application.namespaceprefixes()
+GET     /departement/:codedep/:year                     controllers.Application.depttourisme(codedep : String, year : String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
