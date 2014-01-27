@@ -5,7 +5,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 public interface IDataModel 
 {	
 	/**
-	 * Generate with the mongo database content.
+	 * My job is to generate model content
 	 * @return
 	 */
 	public Model generate();

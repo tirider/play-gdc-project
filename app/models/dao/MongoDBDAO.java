@@ -20,7 +20,7 @@ public class MongoDBDAO
 	private static final String TABLE_NAME    = "hoteldept";
 	
 	/**
-	 * Describes files into the actual collection.
+	 * Describes current mongodb collection properties
 	 */
 	public static final String TABLE_FIELD_1 = "depid";
 	public static final String TABLE_FIELD_2 = "h0e";	
@@ -34,28 +34,30 @@ public class MongoDBDAO
 	/**
 	 * Mongo database holder.
 	 */
-	private MongoDB mdb;
+	private static MongoDB mdb;
 	
 	/**
-	 * Constructor.
+	 * Constructor with parameters
 	 * @param mdb
 	 */
-	public MongoDBDAO(MongoDB mdb) { this.mdb = mdb; }
+	public MongoDBDAO(MongoDB modb) { mdb = modb; }
 
 	/**
-	 *  Retrieve the collection name.
+	 *  Retrieve the collection name
 	 * @return
 	 */
 	public String getName() { return new String(TABLE_NAME); }
 
 	/**
-	 * Retrieve rows from mongodb.
+	 * Retrieve rows from mongodb
 	 * @return
 	 */
 	public List<TourismeHA> findAll() 
 	{
 		// USE A CONNECTION FROM THE POOL
-		DB db = (DB) this.mdb.getConnection();
+		DB db = (DB) mdb.getConnection();
+		
+		System.out.println("Request connection pooling...");
 		db.requestStart();
 		
 		// MAPPING THE RELATED COLLECTION
@@ -95,10 +97,12 @@ public class MongoDBDAO
 		}
 		finally
 		{
+			System.out.println("Releasing the connection back to the pool...");
+			
 			// CLOSE THE CURSOR
 			rows.close();
 			
-			// RELEASE THE CONNECTION BACK TO THE POOL 
+			// RELEASING THE CONNECTION BACK TO THE POOL 
 			db.requestDone();
 		}
 		
@@ -113,7 +117,7 @@ public class MongoDBDAO
 	public TourismeHA find(int depId) 
 	{
 		// USE A CONNECTION FROM THE POOL
-		DB db = (DB) this.mdb.getConnection();
+		DB db = (DB) mdb.getConnection();
 		db.requestStart();
 		
 		// MAPPING THE RELATED COLLECTION
@@ -160,7 +164,7 @@ public class MongoDBDAO
 	public boolean save(TourismeHA dep) 
 	{
 		// USE A CONNECTION FROM THE POOL
-		DB db = (DB) this.mdb.getConnection();
+		DB db = (DB) mdb.getConnection();
 		db.requestStart();
 		
 		// MAPPING THE RELATED COLLECTION
@@ -199,7 +203,7 @@ public class MongoDBDAO
 	public boolean remove(int depId) 
 	{
 		// USE A CONNECTION FROM THE POOL
-		DB db = (DB) this.mdb.getConnection();
+		DB db = (DB) mdb.getConnection();
 		db.requestStart();
 		
 		// MAPPING THE RELATED COLLECTION

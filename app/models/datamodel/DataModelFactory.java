@@ -61,7 +61,7 @@ public class DataModelFactory
 	public static Model createNeo4jModel()
 	{
 		IDataModel neo4jModel = new DataModelNeo4j();
-				
+			
 		return neo4jModel.generate();
 	}
 }

@@ -1,52 +1,40 @@
 package models.dao;
 
+import com.hp.hpl.jena.query.Dataset;
+import com.hp.hpl.jena.tdb.TDBFactory;
+
 import play.Play;
 
-import com.hp.hpl.jena.query.*;
-import com.hp.hpl.jena.tdb.TDBFactory;
 
 public class TDB 
 {
-	public static final String DIRECTORY = Play.application().path() + "/public/data/tdb";
-	
-	private static TDB instance = null;
-	private Dataset dataset = null;
+	/**
+	 * Path to graph
+	 */
+	private static final String DIRECTORY = Play.application().path() + "/public/data/tdb";
 	
 	/**
-	 * Constructor TDBDataset.
+	 * Holds TDB data
 	 */
-	private TDB() 
+	private static Dataset dataset 	= null;
+	
+	/**
+	 * Retrieve the TDB datasets
+	 */
+	public static Dataset getData() 
 	{
-		dataset = TDBFactory.createDataset(DIRECTORY);
+		System.out.println("Getting TDB dataset...");
+		
+		return dataset = TDBFactory.createDataset(DIRECTORY);
 	}
 	
 	/**
-	 * Define a singleton instance.
-	 * @return
+	 * Close the TDB dataset
 	 */
-	public static TDB getInstance() 
-	{
-		if(instance == null) 
-		{
-			instance = new TDB();
-		}
-		return instance;
-	}
-	
-	/**
-	 * Retrieve the TDB datasets.
-	 * @return
-	 */
-	public Dataset getDataset() 
-	{
-		return dataset;
-	}
-	
-	/**
-	 * close the dataset.
-	 */
-	public void close()
-	{
-		dataset.close();
+	public static void close() 
+	{ 
+		System.out.println("Closing TDB dataset...");
+		
+		dataset.close(); 
 	}
 }

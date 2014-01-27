@@ -1,28 +1,35 @@
 package models.beans;
 
-public class Department {
-
-	public String name;
-	public String labelGeonames;
-	public int population;
-	public Geolocalisation geolocalisation;
-	public TourismeANT tourismeant;
-	public TourismeHA tourismeha;
+public class Department 
+{
+	private String name;
+	private String labelGeonames;
+	private int population;
+	private Geolocalisation geolocalisation;
+	private TourismeANT tourismeant;
+	private TourismeHA tourismeha;
 	
-	public Department() {
-		this.population = 0;
+	public Department() 
+	{
+		this.population 				= 0;
+		String name 					= new String();
+		String labelGeonames 			= new String();
+		Geolocalisation geolocalisation = new Geolocalisation();
+		TourismeANT tourismeant 		= new TourismeANT();
+		TourismeHA tourismeha 			= new TourismeHA();
 	}
 	
 	public Department(String labelGeonames, int population,
 			Geolocalisation geolocalisation, TourismeANT tourismeant,
-			TourismeHA tourismeha) {
+			TourismeHA tourismeha) 
+	{
 		super();
-		this.name = name;
-		this.labelGeonames = labelGeonames;
-		this.population = population;
-		this.geolocalisation = geolocalisation;
-		this.tourismeant = tourismeant;
-		this.tourismeha = tourismeha;
+		this.name 			= new String();
+		this.labelGeonames 	= labelGeonames;
+		this.population 	= population;
+		this.geolocalisation= geolocalisation;
+		this.tourismeant 	= tourismeant;
+		this.tourismeha 	= tourismeha;
 	}
 
 	public String getName() {

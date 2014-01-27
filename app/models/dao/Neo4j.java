@@ -13,66 +13,45 @@ public class Neo4j
 	private static final String NEO4J_GRAPH_PATH = Play.application().path() + "/public/data/neo4j/graph.db";
 	
 	/**
-	 * Neo4j singleton instance
-	 */
-	private static Neo4j instance = null;
-
-	/**
 	 * Neo4j graph holder
 	 */
-    private GraphDatabaseService graphDb = null;
+    private static GraphDatabaseService graphDb;
     
     /**
      * Default constructor
      */
-    private Neo4j() 
+    public static GraphDatabaseService getGraphDataBase() 
     {
-        graphDb = null;//new GraphDatabaseFactory().newEmbeddedDatabase(NEO4J_GRAPH_PATH);
+    	System.out.println("Getting the neo4j graph database...");
+    	
+        return graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(NEO4J_GRAPH_PATH);
     }
     
     /**
-     * Singleton implementation
-     * This method return a Neo4j instance
-     * @return
+     * Shutting down the data base usage
      */
-    public static Neo4j getInstance()
+    public static void close()
     {
-    	if(instance == null)
-    	{
-			synchronized(Neo4j.class)
-			{
-				if (instance == null)
-				{
-		    		System.out.println("Oui une instance est crée");
-		    		return new Neo4j();
-				}
-			} 
-    	}
-    	System.out.println("Non une instance est crée");
-    	return instance;
+    	System.out.println("Shutting down Neo4j database...");
+    	
+    	graphDb.shutdown();
     }
     
     /**
-     * This method the neo4j graph
-     * @return
+     * Registers a shutdown hook for the neo4j instance so that it
+       shuts down nicely when the VM exits (even if you "Ctrl-C" the
+       running application).
+     * @param graphDb
      */
-    public GraphDatabaseService getGraph()
+    public static void registerShutdownHook()
     {
-    	return graphDb;
-    }
-    
-    /**
-     * This method delete all datas into neo4j database
-     */
-    /*private void restartDataBase()
-    {
-        try
+        Runtime.getRuntime().addShutdownHook( new Thread()
         {
-            FileUtils.cleanDirectory(new File(Play.application().path()+"/public/data/neo4j/graph.db"));
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException( e );
-        }
-    }    */
+            @Override
+            public void run()
+            {
+                graphDb.shutdown();
+            }
+        } );
+    }    
 }

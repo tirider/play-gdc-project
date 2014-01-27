@@ -4,10 +4,9 @@ package models.datamodel;
 import models.beans.TourismeHA;
 import models.dao.MongoDBDAO;
 import models.dao.MongoDB;
-import models.query.URI;
+import models.query.URIProvider;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
-import com.hp.hpl.jena.datatypes.xsd.impl.XSDBaseNumericType;
 import com.hp.hpl.jena.datatypes.xsd.impl.XSDBaseStringType;
 import com.hp.hpl.jena.datatypes.xsd.impl.XSDYearType;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -18,29 +17,34 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 public class DataModelMongoDB implements IDataModel
 {
+	/**
+	 * Resource property string
+	 */
 	private final String PROP_1 = "info";
 	
 	@Override
 	public Model generate()
 	{
+		// GET DATABASE HANDLER
+		MongoDBDAO mdh = new MongoDBDAO(MongoDB.getInstance());
+		
 		// CREATION DU MODEL
 		Model model = ModelFactory.createDefaultModel(); 
 		
 		// CREATION DE L'ALIAS (NAMESPACE)
-		model.setNsPrefix("trsm", URI.trsm);
+		model.setNsPrefix("trsm", URIProvider.trsm);
 		
-		// GET DATABASE HANDLER
-		MongoDBDAO mdh = new MongoDBDAO(MongoDB.getInstance());
+		System.out.println("Creating MongoDB model...");
 		
-		// CREATION DES RESOURCES PROPRIETES (PREDICATES)
-		Property hasHotel0e        = model.createProperty(URI.trsm,MongoDBDAO.TABLE_FIELD_2);
-		Property hasHotel1e        = model.createProperty(URI.trsm,MongoDBDAO.TABLE_FIELD_3);
-		Property hasHotel2e        = model.createProperty(URI.trsm,MongoDBDAO.TABLE_FIELD_4);
-		Property hasHotel3e        = model.createProperty(URI.trsm,MongoDBDAO.TABLE_FIELD_5);
-		Property hasHotel4e        = model.createProperty(URI.trsm,MongoDBDAO.TABLE_FIELD_6);
-		Property hasHotel5e        = model.createProperty(URI.trsm,MongoDBDAO.TABLE_FIELD_7);
-		Property hasYear           = model.createProperty(URI.trsm,MongoDBDAO.TABLE_FIELD_8);
-		Property trsmInfo 		   = model.createProperty(URI.trsm,PROP_1);
+		// CREATION DES RESOURCES PROPRIETES
+		Property hasHotel0e        = model.createProperty(URIProvider.trsm, MongoDBDAO.TABLE_FIELD_2);
+		Property hasHotel1e        = model.createProperty(URIProvider.trsm, MongoDBDAO.TABLE_FIELD_3);
+		Property hasHotel2e        = model.createProperty(URIProvider.trsm, MongoDBDAO.TABLE_FIELD_4);
+		Property hasHotel3e        = model.createProperty(URIProvider.trsm, MongoDBDAO.TABLE_FIELD_5);
+		Property hasHotel4e        = model.createProperty(URIProvider.trsm, MongoDBDAO.TABLE_FIELD_6);
+		Property hasHotel5e        = model.createProperty(URIProvider.trsm, MongoDBDAO.TABLE_FIELD_7);
+		Property hasYear           = model.createProperty(URIProvider.trsm, MongoDBDAO.TABLE_FIELD_8);
+		Property trsmInfo 		   = model.createProperty(URIProvider.trsm, PROP_1);
 	
 		// DATA TYPE DEFINITION
 		RDFDatatype stringType = XSDBaseStringType.XSDstring;
@@ -53,8 +57,8 @@ public class DataModelMongoDB implements IDataModel
 			if(!dh.getDepId().isEmpty())
 			{
 				// ON DIT QUE CHAQUE ID DE DEP.+L'ANNEE DANS TOURISME SONT DES RESOURCES
-				Resource resourceInsee  = model.createResource(URI.geo+"departement/"+dh.getDepId());
-				Resource resourceTurisme = model.createResource(URI.trsm+"departement/"+dh.getDepId()+"/"+dh.getYear());
+				Resource resourceInsee  = model.createResource(URIProvider.geo+"departement/"+dh.getDepId());
+				Resource resourceTurisme = model.createResource(URIProvider.trsm+"departement/"+dh.getDepId()+"/"+dh.getYear());
 				
 				// ADD TRIPLET INSEE REL TRSM
 				model.add(resourceInsee, trsmInfo, resourceTurisme);
@@ -75,6 +79,8 @@ public class DataModelMongoDB implements IDataModel
 					model.add(resourceTurisme, hasYear,dh.getYear(), yearType);
 			}
 		}		
+		
+		System.out.println("MongoDB model creation done !!!");
 		
 		return model;
 	}

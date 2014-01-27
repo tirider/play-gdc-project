@@ -43,10 +43,11 @@ public class MongoDB
 	}
 	
 	// THIS METHOD IS A REDEFICNITION
-	public static MongoDB getInstance() 
+	public static synchronized MongoDB getInstance() 
 	{
 		if(mongo == null)
 		{	
+			System.out.println("Creating MongoDB instance...");
 			return new MongoDB();
 		}
 		return mongo;

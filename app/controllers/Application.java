@@ -16,7 +16,6 @@ import models.beans.TourismeHA;
 import models.datamodel.DataModelFactory;
 import models.endpoint.SparqlEndpoint;
 import models.global.Core;
-import models.query.URI;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
@@ -25,7 +24,6 @@ import play.mvc.Result;
 import views.html.index;
 import views.html.sparqlresults;
 import views.html.depttourisme;
-import views.html.map;
 import views.html.namespaceprefixes;
 
 public class Application extends Controller 
@@ -40,40 +38,45 @@ public class Application extends Controller
     	return ok(index.render());
     }
 
+    /**
+     * Main actions launcher 
+     * @return
+     */
 	public static Model launch()
 	{
-		// MODEL GENERAL
+//		MODEL GENERAL
 		Model global = ModelFactory.createDefaultModel();
 		
-//		// RECUPERER LE MODELE DE TDB
-		// Model tdb = DataModelFactory.createTDBModel();
-//		
-//		// RECUPERER LE MODELE DE MONGODB
+//		RECUPERER LE MODELE DE TDB
+		Model tdb = DataModelFactory.createTDBModel();
+		
+//		RECUPERER LE MODELE DE MONGODB
 		Model mongodb = DataModelFactory.createMongoModel();
 
-		// RECUPERER LE MODELE DE D2RQ
+// 		RECUPERER LE MODELE DE D2RQ
 		Model d2rq = DataModelFactory.createD2RQModel();
 
-		// RECUPERER LE MODELE DE HBASE
+// 		RECUPERER LE MODELE DE HBASE
 		Model hbase = DataModelFactory.createHBaseModel();
 		
-		// RECUPERER LE MODELE DE NEO4J
+//		RECUPERER LE MODELE DE NEO4J
 		Model neo4j = DataModelFactory.createNeo4jModel();
 		
-		// FOUSSIONER DES MODELS -- EXAMPLE
-		//global.add(tdb);
+//		FOUSSIONER DES MODELS
+		global.add(tdb);
 		global.add(mongodb);	
 		global.add(d2rq);
 		global.add(hbase);
 		global.add(neo4j);
 		
-		// FERMETURE TOUS LES REFERENCES
-		//tdb.close();		
+//		CLOSE ALL REFERENCED MODELS
+		tdb.close();		
 		mongodb.close();
 		d2rq.close();
 		hbase.close();
 		neo4j.close();
-		
+
+//		RETURN GLOBAL MODEL
 		return global;
 	}
 	
@@ -95,10 +98,10 @@ public class Application extends Controller
      */
     public static Result depttourisme(String codedep, String year)
     {
-    	Geolocalisation depGeoInfo = new Geolocalisation();
-    	TourismeANT tourismeANT = new TourismeANT();
-    	TourismeHA tourismeHA = new TourismeHA();
-    	Department departement = new Department();
+    	Geolocalisation depGeoInfo 	= new Geolocalisation();
+    	TourismeANT tourismeANT 	= new TourismeANT();
+    	TourismeHA tourismeHA 		= new TourismeHA();
+    	Department departement 		= new Department();
         
     	String query = "SELECT ?nomDepartement ?label ?pop ?arrivees ?nuitees ?tauxOccupation ?date WHERE { "
 	    			+ "?resourceDepartement rdf:type igeo:Departement . "

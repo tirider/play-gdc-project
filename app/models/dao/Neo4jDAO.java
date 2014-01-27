@@ -10,7 +10,6 @@ import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 import models.beans.Geolocalisation; 
 import play.Play;
@@ -18,48 +17,35 @@ import play.Play;
 public class Neo4jDAO 
 {
 	/**
-	 * This file contains data to start neo4j database
-	 */
-	private static String DATA_FILE_PATH = Play.application().path()+"/public/data/neo4j/geolocalisation.txt";
-	
-	private static final String NEO4J_GRAPH_PATH = Play.application().path() + "/public/data/neo4j/graph.db";
-	
-	/**
 	 * Holds mongodb table name.
 	 */
 	private static final String DYNAMIC_LABEL = "Geolocalisation";
 	
+	/**
+	 * Node properties
+	 */
 	private static final String FIELD_1    = "codedep";
 	private static final String FIELD_2    = "lat";
 	private static final String FIELD_3    = "long";
 	
 	/**
-	 * Neo4j singleton instance
-	 */
-	private Neo4j neo4jgraph ;
-	
-	private static GraphDatabaseService graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(NEO4J_GRAPH_PATH);
-
-	/**
-	 * Constructor with params
+	 * Default constructor
 	 * @param neo4j
 	 */
-	public Neo4jDAO(Neo4j neo4j)
-	{
-		this.neo4jgraph = neo4j;
-	}
+	public Neo4jDAO() {}
     
 	/**
 	 * This method returns all data from neo4j
 	 * @return
 	 */
 	@SuppressWarnings("deprecation")
-	public ArrayList<Geolocalisation> getAll()
+	public ArrayList<Geolocalisation> getStoragedData()
 	{
     	// GET ALL DATA FROM FILE
     	ArrayList<Geolocalisation> list = new ArrayList<Geolocalisation>();
-    			
-    	GraphDatabaseService graph = graphDb;
+    	
+    	// GETTING GRAPH DATABASE
+    	GraphDatabaseService graph = Neo4j.getGraphDataBase();
     			
         // START SNIPPET: transaction
         try ( Transaction tx = graph.beginTx())
@@ -92,7 +78,9 @@ public class Neo4jDAO
         	tx.success();
         }
         
-        registerShutdownHook(graph);	
+        // SHUTTING DOWN THE GRAPH DATABASE
+        Neo4j.registerShutdownHook();
+        Neo4j.close();
         
 		return list;
 	}
@@ -103,11 +91,11 @@ public class Neo4jDAO
     public void initDataBase()
     {
     	// GET ALL DATA FROM FILE
-    	ArrayList<Geolocalisation> list = read(DATA_FILE_PATH);
+    	ArrayList<Geolocalisation> list = read();
     	
     	if(!list.isEmpty())
     	{
-    		GraphDatabaseService graph = graphDb;
+    		GraphDatabaseService graph = Neo4j.getGraphDataBase();
     		
 	        // START SNIPPET: transaction
 	        try ( Transaction tx = graph.beginTx())
@@ -128,44 +116,29 @@ public class Neo4jDAO
 	        	}
 	        }
 	       
-	        registerShutdownHook(graph);
+	        // SHUTTING DOWN THE GRAPH DATABASE
+	        Neo4j.registerShutdownHook();
+	        Neo4j.close();
     	}
     	else System.err.println("Not operations (on neo4jdb database)...");
     }  
-    
-    /**
-     * Registers a shutdown hook for the neo4j instance so that it
-       shuts down nicely when the VM exits (even if you "Ctrl-C" the
-       running application).
-     * @param graphDb
-     */
-    private static void registerShutdownHook( final GraphDatabaseService graphDb )
-    {
-        Runtime.getRuntime().addShutdownHook( new Thread()
-        {
-            @Override
-            public void run()
-            {
-                graphDb.shutdown();
-            }
-        } );
-    }
     
 	/**
 	 * This method read commun .txt file
 	 * @param filePathName
 	 * @return A set of geolicalisable object.
 	 */
-	private ArrayList<Geolocalisation> read(String filePathName)
+	private ArrayList<Geolocalisation> read()
 	{
 		ArrayList<Geolocalisation> list = new ArrayList<Geolocalisation>();
+		String filePath = Play.application().path()+"/public/data/neo4j/geolocalisation.txt";
 		
-		if(new File(filePathName).exists())
+		if(new File(filePath).exists())
 		{
 			Scanner scanner = null;
 			try 
 	        {
-	            scanner = new Scanner(new File(filePathName));
+	            scanner = new Scanner(new File(filePath));
 	            
 	            // SKIP (HEADER) THE FIRST LINE FROM FILE
 	            scanner.nextLine();

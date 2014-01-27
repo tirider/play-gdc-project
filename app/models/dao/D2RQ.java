@@ -11,12 +11,7 @@ public class D2RQ
 	/**
 	 * Hols the d2rq mapping file path
 	 */
-	private static final String MAPPING_PATH = Play.application().path() + "/conf/d2rq-mapping.n3";
-	
-	/**
-	 * Instance class D2RQ.
-	 */
-	private static D2RQ instance = null;
+	private static final String MAPPING_FILE_PATH = Play.application().path() + "/conf/d2rq-mapping.n3";
 	
 	/**
 	 * Model D2RQ.
@@ -24,30 +19,21 @@ public class D2RQ
 	private static Model d2rqModel = null;
 			
 	/**
-	 * Constructor D2RQ.
+	 * Getting d2rq database model (ready to mapping)
+	 * @return
 	 */
-	private D2RQ()
+	public static Model getModel()
 	{
-		d2rqModel = new ModelD2RQ(MAPPING_PATH);
+		System.out.println("Getting D2RQ model...");
+		
+		return d2rqModel = new ModelD2RQ(MAPPING_FILE_PATH);
 	}
 	
 	/**
-	 * Constructor singleton.
-	 * @return
+	 * Close model
 	 */
-	public static D2RQ getInstance()
+	public void close()
 	{
-		if(instance == null)
-			return new D2RQ();
-		return instance;
-	}
-
-	/**
-	 * Retrieve the D2RQ model.
-	 * @return
-	 */
-	public Model getD2RQModel()
-	{
-		return d2rqModel;
+		d2rqModel.close();
 	}
 }

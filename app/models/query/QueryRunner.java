@@ -3,17 +3,14 @@ package models.query;
 import models.beans.Geolocalisation;
 
 import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.query.QueryExecutionFactory; 
 import com.hp.hpl.jena.sparql.engine.http.QueryExceptionHTTP;
 
 public class QueryRunner 
 {	
 	private static final String SERVICE = "http://dbpedia.org/sparql";
-	private static final String FIELD1  = "cityLat";
-	private static final String FIELD2  = "cityLong";
+//	private static final String FIELD1  = "cityLat";
+//	private static final String FIELD2  = "cityLong";
 	
 	/**
 	 * Usuful for query execution
@@ -25,25 +22,25 @@ public class QueryRunner
 	{
 		Geolocalisation region = null;
 		
-		String query = String.format(queryString, regionName);
-		
-		QueryExecution qexec = QueryExecutionFactory.sparqlService(SERVICE, query);
-		ResultSet results = qexec.execSelect() ;
-
-		for ( ; results.hasNext() ; )
-		{
-			region = new Geolocalisation();
-			
-			QuerySolution qsolution = results.nextSolution() ;
-		    
-			Literal result = qsolution.getLiteral(FIELD1) ;
-		    
-			result = qsolution.getLiteral(FIELD1) ;
-		    String cityLat = result.getString();
-		    
-			result = qsolution.getLiteral(FIELD2) ;
-		    String cityLong = result.getString();
-		}
+//		String query = String.format(queryString, regionName);
+//		
+//		QueryExecution qexec = QueryExecutionFactory.sparqlService(SERVICE, query);
+//		ResultSet results = qexec.execSelect() ;
+//
+//		for ( ; results.hasNext() ; )
+//		{
+//			region = new Geolocalisation();
+//			
+//			QuerySolution qsolution = results.nextSolution() ;
+//		    
+//			Literal result = qsolution.getLiteral(FIELD1) ;
+//		    
+//			result = qsolution.getLiteral(FIELD1) ;
+//		    String cityLat = result.getString();
+//		    
+//			result = qsolution.getLiteral(FIELD2) ;
+//		    String cityLong = result.getString();
+//		}
 		return  region;
 	}
 	
