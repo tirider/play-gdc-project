@@ -8,6 +8,7 @@ import models.query.URI;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.xsd.impl.XSDBaseNumericType;
+import com.hp.hpl.jena.datatypes.xsd.impl.XSDBaseStringType;
 import com.hp.hpl.jena.datatypes.xsd.impl.XSDYearType;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -42,7 +43,7 @@ public class DataModelMongoDB implements IDataModel
 		Property trsmInfo 		   = model.createProperty(URI.trsm,PROP_1);
 	
 		// DATA TYPE DEFINITION
-		RDFDatatype numericType = XSDBaseNumericType.XSDbase64Binary;
+		RDFDatatype stringType = XSDBaseStringType.XSDstring;
 		RDFDatatype yearType = XSDYearType.XSDgYear;
 		
 		// PARCOURS POUR AJOUTER TOUS LES VALEURS DE LA BD AU MODEL
@@ -59,17 +60,17 @@ public class DataModelMongoDB implements IDataModel
 				model.add(resourceInsee, trsmInfo, resourceTurisme);
 				
 				if(!dh.getHotel0E().isEmpty())
-					model.add(resourceTurisme, hasHotel0e, dh.getHotel0E(), numericType);
+					model.add(resourceTurisme, hasHotel0e, dh.getHotel0E(), stringType);
 				if(!dh.getHotel1E().isEmpty())
-					model.add(resourceTurisme, hasHotel1e, dh.getHotel1E(), numericType);
+					model.add(resourceTurisme, hasHotel1e, dh.getHotel1E(), stringType);
 				if(!dh.getHotel2E().isEmpty())
-					model.add(resourceTurisme, hasHotel2e, dh.getHotel2E(), numericType);
+					model.add(resourceTurisme, hasHotel2e, dh.getHotel2E(), stringType);
 				if(!dh.getHotel3E().isEmpty())
-					model.add(resourceTurisme, hasHotel3e, dh.getHotel3E(), numericType);
+					model.add(resourceTurisme, hasHotel3e, dh.getHotel3E(), stringType);
 				if(!dh.getHotel4E().isEmpty())
-					model.add(resourceTurisme, hasHotel4e, dh.getHotel4E(), numericType);
+					model.add(resourceTurisme, hasHotel4e, dh.getHotel4E(), stringType);
 				if(!dh.getHotel5E().isEmpty())
-					model.add(resourceTurisme, hasHotel5e, dh.getHotel5E(), numericType);
+					model.add(resourceTurisme, hasHotel5e, dh.getHotel5E(), stringType);
 				if(!dh.getYear().isEmpty())
 					model.add(resourceTurisme, hasYear,dh.getYear(), yearType);
 			}

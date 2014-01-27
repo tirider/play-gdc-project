@@ -45,35 +45,34 @@ public class Application extends Controller
 		// MODEL GENERAL
 		Model global = ModelFactory.createDefaultModel();
 		
-//		// RECUPERER LE MODEL DE TDB
-		Model tdb = DataModelFactory.createTDBModel();
+//		// RECUPERER LE MODELE DE TDB
+		// Model tdb = DataModelFactory.createTDBModel();
 //		
-//		// RECUPERER LE MODEL DE MONGODB
+//		// RECUPERER LE MODELE DE MONGODB
 		Model mongodb = DataModelFactory.createMongoModel();
 
-		// RECUPERER LE MODEL DE D2RQ
+		// RECUPERER LE MODELE DE D2RQ
 		Model d2rq = DataModelFactory.createD2RQModel();
 
-		// RECUPERER LE MODEL DE HBASE
+		// RECUPERER LE MODELE DE HBASE
 		Model hbase = DataModelFactory.createHBaseModel();
 		
-		// RECUPERER LE MODEL DE NEO4J
+		// RECUPERER LE MODELE DE NEO4J
 		Model neo4j = DataModelFactory.createNeo4jModel();
 		
 		// FOUSSIONER DES MODELS -- EXAMPLE
-		global.add(tdb);
-		global.add(hbase);
-		global.add(mongodb);
+		//global.add(tdb);
+		global.add(mongodb);	
 		global.add(d2rq);
+		global.add(hbase);
 		global.add(neo4j);
 		
 		// FERMETURE TOUS LES REFERENCES
-		d2rq.close();
+		//tdb.close();		
 		mongodb.close();
-		tdb.close();
+		d2rq.close();
 		hbase.close();
 		neo4j.close();
-		//global.close();
 		
 		return global;
 	}

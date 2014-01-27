@@ -2,8 +2,8 @@ package models.dao;
 
 import play.Play;
 
-import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.query.*;
+import com.hp.hpl.jena.tdb.TDBFactory;
 
 public class TDB 
 {
