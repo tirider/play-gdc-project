@@ -1,66 +1,56 @@
 package models.endpoint;
 
 import java.io.ByteArrayOutputStream; 
+
+import models.query.QueryStringProvider;
+
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory; 
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.sparql.vocabulary.FOAF;
-import com.hp.hpl.jena.vocabulary.DC;
-import com.hp.hpl.jena.vocabulary.OWL;
-import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
+import com.hp.hpl.jena.rdf.model.Model;   
 
-public class SparqlEndpoint {
-
+public class SparqlEndpoint 
+{
+	/**
+	 * 
+	 * @param m
+	 * @param q
+	 * @return
+	 */
 	public static ResultSet queryData(Model m, String q)
 	{
-    	// PREFIXES
-    	String prefixes = 	"PREFIX rdfs: <"+RDFS.getURI()+"> "+
-    						"PREFIX rdf: <"+RDF.getURI()+"> " +
-    						"PREFIX owl: <"+OWL.getURI()+"> " +
-    						"PREFIX dc: <"+DC.getURI()+"> " +
-    						"PREFIX foaf: <"+FOAF.getURI()+"> "+
-    						"PREFIX igeo: <http://rdf.insee.fr/def/geo#>" +
-    						"PREFIX skos: <http://www.w3.org/2004/02/skos/core#>" +
-    						"PREFIX idemo: <http://rdf.insee.fr/def/demo#>" +
-    						"PREFIX trsm: <http://www.tourisme.fr/>" +
-    						"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>";
-
+		// RECUPERE LES PREFIXES
+		String prefixes = QueryStringProvider.prefixes;
+		
         // SPARQL
     	String q1 = prefixes + q;
 
     	ResultSet results = null; 
     			
-    	try {
+    	try 
+    	{
 	        Query query = QueryFactory.create(q1);
 	        QueryExecution qexec = QueryExecutionFactory.create(query, m);
 	        results = qexec.execSelect();
     	}
-    	catch(Exception e) {
-    		results = null;
-    	}
-    	finally 
-    	{
-    		try 
-    		{
-        		//m.close();
-			} 
-    		catch (Exception e2) 
-    		{
-				System.out.println(e2.getMessage());
-			}
-    	}
+    	catch(Exception e) {  results = null; }
+    	
     	return results;
 	}
 	
+	/**
+	 * This method format the query result to html 
+	 * @param results
+	 * @return
+	 */
 	public static String outputHtml(ResultSet results)
 	{
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ResultSetFormatter.out(baos, results);
+		
 	    String resultStr = baos.toString();
 	    resultStr = resultStr.replace("<", "&lt;");
 	    resultStr = resultStr.replace(">", "&gt;");

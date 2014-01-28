@@ -1,0 +1,22 @@
+
+SELECT ?nomDepartement ?label ?pop ?arrivees ?nuitees ?tauxOccupation ?date 
+WHERE 
+{ 
+ ?resourceDepartement rdf:type igeo:Departement . 
+ ?resourceDepartement igeo:nom ?nomDepartement . 
+ ?resourceDepartement igeo:codeDepartement ?codeDepartement . 
+ igeo:Departement ?p ?o . 
+ ?o skos:definition ?label . 
+ ?resourceDepartement trsm:info ?resourceTourismeDepartement . 
+ ?resourceTourismeDepartement trsm:arrivees ?arrivees . 
+ ?resourceTourismeDepartement trsm:nuitees ?nuitees . 
+ ?resourceTourismeDepartement trsm:tauxOccupation ?tauxOccupation . 
+ ?resourceTourismeDepartement dc:date ?date . 
+ OPTIONAL { 
+ ?resourceDepartement idemo:population ?resourcePopulation . 
+ ?resourcePopulation idemo:populationTotale ?pop . 
+ ?resourcePopulation idemo:date ?datepop . 
+ FILTER (str(?datepop) = \"" + year + "-01-01\")
+ } 
+ FILTER (lang(?label) = 'en' && ?date = \"" + year + "\" && ?codeDepartement = \"" + codedep + "\") 
+};

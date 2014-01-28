@@ -14,52 +14,125 @@
 
 @content = {
             <section class='row featured-items'>
+            	<!-- start left part -->
                 <section class='span9'>
-                    <div class='row'>
-                        <div class='span9'>
-                            <div class='top-bar'>
-                                <div class='bar-title'>
-                                    <div class='inner'>
-                                        <div class='pull-left custom-margin'>
-                                            <strong class="strong-title">Description</strong>
-                                        </div>
-                                        <div class='pull-right results-per-page custom-margin'>
-                                            <strong>@departement.getName()</strong>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class='bar-bottom'>
-                                    <div class='inner'>
-                                        <div class='pull-left custom-margin'>
-                                            <p>Geonames: @departement.getLabelGeonames()</p>
-                                            <p>Population: 
-                                            @if(departement.getPopulation() == 0) {
-                                                Information not available for year @year
-                                            } else {
-                                                @departement.getPopulation()
-                                            }
-                                            </p>
-                                        </div>
-                                    </div>
+                	<!-- population start -->
+	                <div class='row'>
+	                    <div class='span9'>
+	                        <div class='top-bar'>
+	                            <div class='bar-title'>
+	                                <div class='inner'>
+	                                    <div class='pull-left custom-margin'>
+	                                        <strong class="strong-title">Description</strong>
+	                                    </div>
+	                                    <div class='pull-right results-per-page custom-margin'>
+	                                        <strong>@departement.getName()</strong>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            <div class='bar-bottom'>
+	                                <div class='inner'>
+	                                    <div class='pull-left custom-margin'>
+	                                        <p>Geonames: @departement.getLabelGeonames()</p>
+	                                        <p>Population: 
+	                                        @if(departement.getPopulation() == 0) {
+	                                            Information not available for year @year
+	                                        } else {
+	                                            @departement.getPopulation()
+	                                        }
+	                                        </p>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	                <!-- population ends -->
+	                
+                	<!-- Map start -->
+	                 <div class='location-finder'>
+	                    <div class='location-finder'>
+	                            <div id="map_canvas"> </div>
+	                    </div>
+	                 </div>
+                	<!-- Map ends -->
+                </section>
+                <!-- ends left part -->
+                
+                <!-- start right part -->
+                <aside class='span3'>
+                	<section class='widget'>
+                        <section class='widget-title uppercase'>
+                            <div class='inner'>
+                                <div class='pull-left custom-margin'>
+                                    <h2><strong>Tourism</strong></h2>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class='location-finder'>
-                        <h3>Tourisme</h3>
-                        <p>Arrivées: @departement.getTourismeant().getArrivees()</p>
-                        <p>Nuitées: @departement.getTourismeant().getNuitees()</p>
-                        <p>Taux d'occupation: @departement.getTourismeant().getTauxOccupation()%</p>
-                    </div>
-                    <div class='location-finder'>
-                            <div id="map_canvas"> </div>
-                    </div>
-                </section>
-            </section>   
+                        </section>
+                        <section class='widget-content'>
+                             <div class='widget-section'>
+                                 <div class='inner'>
+                                     <label>Arrived</label>
+                                     <p><strong>@departement.getTourismeant().getArrivees()</strong></p>
+                                 </div>
+                             </div>
+                             <div class='widget-section'>
+                                 <div class='inner'>
+                                     <label>Nuitées</label>
+                                     <p><strong>@departement.getTourismeant().getNuitees()</strong></p>
+                                 </div>
+                             </div>
+                             <div class='widget-section'>
+                                 <div class='inner'>
+                                     <label>Taux d'occupation</label>
+                                     <p><strong>@departement.getTourismeant().getTauxOccupation()%</strong></p>
+                                 </div>
+                             </div>
+                             <div class='widget-section'>
+                                 <div class='inner'>
+                                     <label>Classement</label>
+                                    <p>Nb d'hôtels non classés: @departement.getTourismeha().getHotel0E()</p>
+			                        <p>Nb d'hôtels classés d'un étoile: @departement.getTourismeha().getHotel1E()</p>
+			                        <p>Nb d'hôtels classés de deux étoiles: @departement.getTourismeha().getHotel2E()</p>
+			                        <p>Nb d'hôtels classés de trois étoiles: @departement.getTourismeha().getHotel3E()</p>
+			                        <p>Nb d'hôtels classés de quatre étoiles: @departement.getTourismeha().getHotel4E()</p>
+			                        <p>Nb d'hôtels classés de cinq étoiles: @departement.getTourismeha().getHotel5E()</p>
+                                 </div>
+                             </div>
+                         </section>
+                    </section>
+                    
+                    <section class='widget'>
+                        <section class='widget-title uppercase'>
+                            <div class='inner'>
+                                    <div class='pull-left custom-margin'>
+                                        <h2>Impots</h2>
+                                    </div>
+                            </div>
+                        </section>
+                        <section class='widget-content'>
+                                <div class='widget-section'>
+                                    <div class='inner'>
+                                        <label>Moyenne d'impots</label>
+                                        <p><strong>@departement.getImpot().getImpots()</strong></p>
+                                    </div>
+                                </div>
+                                <div class='widget-section'>
+                                    <div class='inner'>
+                                        <label>Moyenne patrimoine</label>
+                                        <p><strong>@departement.getImpot().getPatrimoine()</strong></p>
+                                    </div>
+                                </div>
+                        </section>
+                    </section>
+                </aside>
+                <!-- ends right part -->
+            </section>            
+                        
         <script type="text/javascript">
             jQuery(document).ready(function() {
                 
-                var mapLatLng = new google.maps.LatLng();
+                var mapLatLng = new google.maps.LatLng(@departement.getGeolocalisation().getLatitude(),@departement.getGeolocalisation().getLongitude());
                 
                 $('#map_canvas').gmap3({
                      map:{
@@ -73,7 +146,8 @@
                             title:'Rating Up',
                             latLng: mapLatLng,
                             options:{
-                                    draggable: false
+                                    draggable: false,
+                                  	animation: google.maps.Animation.DROP
                             },
                             events:{
                                     mouseover: function(marker, event, context){
@@ -81,7 +155,6 @@
                                         
                                         if (infowindow){
                                             infowindow.open(map, marker);
-                                            infowindow.setContent('<div id=\"marker-info-windows\">'+$('#feedback').html()+'</div>');
                                         } 
                                         else {
                                             $(this).gmap3({

@@ -1799,6 +1799,8 @@ margin: 15px 0px;  */
     min-width: 1127px;
     max-width: 1127px;
     min-height: 233px;
+    font-family : monospace;
+    font-size: 16pt;
 }
 
 figure img {
@@ -1825,7 +1827,6 @@ figure img {
   float: left;
   overflow: hidden;
   position: relative;
-  margin-bottom: 30px;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);  
 }
 .location-finder .button-slider {
@@ -2317,4 +2318,7 @@ figure img {
 .right-serv {
     float: right;
     width: 400px;
+}
+.location-finder-inner {
+	padding: 20px;
 }

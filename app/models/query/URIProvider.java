@@ -6,7 +6,6 @@ import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
-import com.hp.hpl.jena.vocabulary.XSD;
 
 public class URIProvider 
 {
@@ -43,7 +42,7 @@ public class URIProvider
 	/**
 	 * XSD uniform resource identifier
 	 */
-	public static final String xsd 		= XSD.getURI();
+	public static final String xsd 		= "http://www.w3.org/2001/XMLSchema#";
 	
 	/**
 	 * INSEE prop uniform resource identifier
@@ -73,25 +72,5 @@ public class URIProvider
 	/**
 	 * SKOS uniform resource identifier
 	 */
-	public static final String skos 	= "http://skos.org/";	
-	
-	/**
-	 * VOAF uniform resource identifier
-	 */
-	public static final String voaf 	= "http://voaf.org/";	
-	
-	/**
-	 * VANN uniform resource identifier
-	 */
-	public static final String vann 	= "http://vann.org/";	
-	
-	/**
-	 * CC uniform resource identifier
-	 */
-	public static final String cc 	= "http://cc.org/";	
-	
-	/**
-	 * GeoNames uniform resource identifier
-	 */
-	public static final String gn 	= "http://geoanmes.org/";		
+	public static final String skos 	= "hhttp://www.w3.org/2004/02/skos/core#";	
 }

@@ -12,5 +12,6 @@ public class Global extends GlobalSettings
     public void onStop(Application app) 
     {
     	System.out.println("Application shutdown...");
+    	controllers.Application.global.close();
     }
 }

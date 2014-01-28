@@ -36,42 +36,42 @@ public class DataModelTDB implements IDataModel
 
         // ASSOCIATE REGION - ADM1
         Resource igeoRegion = geoInsee.getResource(URIProvider.igeo + "Region");
-        Resource Adm1 = geonames.getResource(URIProvider.gn + "A.ADM1");
+        Resource Adm1 = geonames.getResource(URIProvider.geo + "A.ADM1");
         
         geoInsee.add(igeoRegion, OWL.equivalentClass, Adm1);
         geoInsee.add(Adm1, OWL.equivalentClass, igeoRegion);
         
         // ASSOCIATE REGION - ADM2
         Resource igeoDepartement = geoInsee.getResource(URIProvider.igeo + "Departement");
-        Resource Adm2 = geonames.getResource(URIProvider.gn + "A.ADM2");
+        Resource Adm2 = geonames.getResource(URIProvider.geo + "A.ADM2");
         
         geoInsee.add(igeoDepartement, OWL.equivalentClass, Adm2);
         geoInsee.add(Adm2, OWL.equivalentClass, igeoDepartement);
         
         // ASSOCIATE ARRONDISSEMENT - ADM3
         Resource igeoArrondissement = geoInsee.getResource(URIProvider.igeo + "Arrondissement");
-        Resource Adm3 = geonames.getResource(URIProvider.gn + "A.ADM3");
+        Resource Adm3 = geonames.getResource(URIProvider.geo + "A.ADM3");
         
         geoInsee.add(igeoArrondissement, OWL.equivalentClass, Adm3);
         geoInsee.add(Adm3, OWL.equivalentClass, igeoArrondissement);
         
         // ASSOCIATE CANTON - ADM4
         Resource igeoCanton = geoInsee.getResource(URIProvider.igeo + "Canton");
-        Resource Adm4 = geonames.getResource(URIProvider.gn + "A.ADM4");
+        Resource Adm4 = geonames.getResource(URIProvider.geo + "A.ADM4");
         
         geoInsee.add(igeoCanton, OWL.equivalentClass, Adm4);
         geoInsee.add(Adm4, OWL.equivalentClass, igeoCanton);
         
         // ASSOCIATE COMMUNE - ADM5
         Resource igeoCommune = geoInsee.getResource(URIProvider.igeo + "Commune");
-        Resource Adm5 = geonames.getResource(URIProvider.gn + "A.ADM5");
+        Resource Adm5 = geonames.getResource(URIProvider.geo + "A.ADM5");
         
         geoInsee.add(igeoCommune, OWL.equivalentClass, Adm5);
         geoInsee.add(Adm5, OWL.equivalentClass, igeoCommune);
         
         // ASSOCIATE PAYS - COUNTRY (PCLI)
         Resource igeoPays = geoInsee.getResource(URIProvider.igeo + "Pays");
-        Resource apcli = geonames.getResource(URIProvider.gn + "A.PCLI");
+        Resource apcli = geonames.getResource(URIProvider.geo + "A.PCLI");
         
         geoInsee.add(igeoPays, OWL.equivalentClass, apcli);
         geoInsee.add(apcli, OWL.equivalentClass, igeoPays);

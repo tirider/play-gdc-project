@@ -8,6 +8,7 @@ public class Department
 	private Geolocalisation geolocalisation;
 	private TourismeANT tourismeant;
 	private TourismeHA tourismeha;
+	private Impot impot;
 	
 	public Department() 
 	{
@@ -21,7 +22,7 @@ public class Department
 	
 	public Department(String labelGeonames, int population,
 			Geolocalisation geolocalisation, TourismeANT tourismeant,
-			TourismeHA tourismeha) 
+			TourismeHA tourismeha, Impot impot) 
 	{
 		super();
 		this.name 			= new String();
@@ -30,6 +31,7 @@ public class Department
 		this.geolocalisation= geolocalisation;
 		this.tourismeant 	= tourismeant;
 		this.tourismeha 	= tourismeha;
+		this.impot 	= impot;
 	}
 
 	public String getName() {
@@ -78,6 +80,14 @@ public class Department
 
 	public void setTourismeha(TourismeHA tourismeha) {
 		this.tourismeha = tourismeha;
+	}
+
+	public Impot getImpot() {
+		return impot;
+	}
+
+	public void setImpot(Impot impot) {
+		this.impot = impot;
 	}
 	
 	

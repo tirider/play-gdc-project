@@ -15,4 +15,3 @@ dist
 /.settings
 /public/data/tdb/*
 /public/data/neo4j/graph.db/*
-/lib/*

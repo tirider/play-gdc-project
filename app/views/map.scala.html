@@ -1,6 +1,6 @@
-@(geolocalisation : models.beans.Geolocalisation, date : Date)
+@(departements : List[models.beans.Geolocalisation])
 
-@main(geolocalisation.getName(), scripts)(subtitle)(content)
+@main("Departments map", scripts)(subtitle)(content)
 
 @scripts = {
 			<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&amp;language=en"></script>
@@ -8,13 +8,15 @@
 }
 
 @subtitle = {
-			<h1><a>@geolocalisation.getName()</a></h1>
+			<h1><a>Departments map</a></h1>
 			<p>In this section we provide you information about your this department. </p>
 }
 
 @content = {
             <section class='row featured-items'>
+            	<!-- start left part -->
                 <section class='span9'>
+                	<!-- population start -->
 	                <div class='row'>
 	                    <div class='span9'>
 	                        <div class='top-bar'>
@@ -24,72 +26,117 @@
 	                                        <strong class="strong-title">Description</strong>
 	                                    </div>
 	                                    <div class='pull-right results-per-page custom-margin'>
-	                                    	<strong>@geolocalisation.getName()</strong>
-	                                        	@if(!geolocalisation.getName().isEmpty()){
-	                                            	<strong>@geolocalisation.getName()</strong>
-	                                            }
+	                                    	<strong>Departments map</strong>
 	                                    </div>
 	                                </div>
 	                            </div>
 	                            <div class='bar-bottom'>
 	                                <div class='inner'>
 	                                    <div class='pull-left custom-margin'>
-	                                        <p>Your resume letter here...</p>
+	                                        <p>You can examinate any of your France's departements by clicking on any of the markers over the map.</p>
 	                                    </div>
 	                                </div>
 	                            </div>
 	                        </div>
 	                    </div>
 	                </div>
-	                <div class='location-finder'>
-	                    <div class='left-side'> </div>
-	                    <div class='right-side'>
-	                        <a href="#" class='button-slider expanded'> </a>
-	                        <div id="map_canvas"> </div>
+	                <!-- population ends -->
+	                
+                	<!-- Map start -->
+	                 <div class='location-finder'>
+	                    <div class='location-finder'>
+	                            <div id="map_canvas"> </div>
 	                    </div>
-	                </div>
-	                    
+	                 </div>
+                	<!-- Map ends -->
                 </section>
-            </section>   
+                <!-- ends left part -->
+                
+                <!-- start right part -->
+                <aside class='span3'>
+                	<section class='widget'>
+                        <section class='widget-title uppercase'>
+                            <div class='inner'>
+                                <div class='pull-left custom-margin'>
+                                    <h2><strong>Markers</strong></h2>
+                                </div>
+                            </div>
+                        </section>
+                        <section class='widget-content'>
+                             <div class='widget-section'>
+                                 <div class='inner'>
+                                     <label>Information</label>
+                                     <p><strong> </strong></p>
+                                 </div>
+                             </div>
+                              
+                         </section>
+                    </section>
+                    
+                    <section class='widget'>
+                        <section class='widget-title uppercase'>
+                            <div class='inner'>
+                                    <div class='pull-left custom-margin'>
+                                        <h2>Maps</h2>
+                                    </div>
+                            </div>
+                        </section>
+                        <section class='widget-content'>
+                                <div class='widget-section'>
+                                    <div class='inner'>
+                                        <label>France</label>
+                                        <p><strong> </strong></p>
+                                    </div>
+                                </div>
+                        </section>
+                    </section>
+                </aside>
+                <!-- ends right part -->
+            </section>            
+            
         <script type="text/javascript">
-            jQuery(document).ready(function() {
-            	
-            	var mapLatLng = new google.maps.LatLng(@geolocalisation.getLatitude(), @geolocalisation.getLongitude());
-            	
-                $('#map_canvas').gmap3({
-					 map:{
-					     options:{
-					     		center: mapLatLng,
-					     		zoom: 9,
-					     		mapTypeId: google.maps.MapTypeId.TERRAIN
-					     }
-					 },
-					 marker:{
-					 		title:'Rating Up',
-					    	latLng: mapLatLng,
-					    	options:{
-                                    draggable: false
-                            },
-						    events:{
-                                    mouseover: function(marker, event, context){
-                                        var map = $(this).gmap3("get"),infowindow = $(this).gmap3({get:{name:"infowindow"}});
-                                        
-                                        if (infowindow){
-                                            infowindow.open(map, marker);
-                                            infowindow.setContent('<div id=\"marker-info-windows\">'+$('#feedback').html()+'</div>');
-                                        } 
-                                        else {
-                                            $(this).gmap3({
-                                                infowindow:{
-                                                    anchor:marker,
-                                                    options:{content: '<div id=\"marker-info-windows\">'+$('#feedback').html()+'</div>'}
+         jQuery("#map_canvas").gmap3({
+                  map:{
+                  options:{
+                  center:[46.634351,2.611084],
+                  zoom: 6
+                  }
+                  },
+                  marker:{
+                  values:[
+                                                @if(!departements.isEmpty()) {
+                                                 @for((d, index) <- departements.zipWithIndex){
+                                                         {latLng:[@d.getLatitude(), @d.getLongitude()], data:"@d.getName()|@d.getCodedep()"},
+                                                 }
                                                 }
-                                            });
-                                        }
-                                    }
-						    }					    	
-					}					
-				});
-			});
+                                 ],
+                  options:{
+                  	draggable: false,
+                  	animation: google.maps.Animation.DROP
+                  },
+                  events:{
+	                  mouseover: function(marker, event, context){
+	                  var map = $(this).gmap3("get"), infowindow = $(this).gmap3({get:{name:"infowindow"}});
+	                  if (infowindow){
+		                  infowindow.open(map, marker);
+		                  infowindow.setContent("<div>" + context.data.split('|')[0] + "<br><a href=\"departement/" + context.data.split('|')[1] + "/2012\">Information</a><div>");
+	                  } else {
+	                  $(this).gmap3({
+		                  infowindow:{
+		                  anchor:marker,
+		                  options:{content: context.data}
+	                  }
+	                  });
+	                  }
+	                  },
+	                  /* mouseout: function(){
+		                  var infowindow = $(this).gmap3({get:{name:"infowindow"}});
+		                  if (infowindow){
+		                  	infowindow.close();
+	                  	}
+	                  } */
+                  }
+                  }
+                 });
         </script>
 }

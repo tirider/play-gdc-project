@@ -15,6 +15,15 @@ public class Geolocalisation
 		this.longitude = 0;
 	}
 
+	public Geolocalisation(String name, String codedep, float latitude,
+			float longitude) {
+		super();
+		this.name = name;
+		this.codedep = codedep;
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
+
 	public String getCodedep() {
 		return codedep;
 	}
