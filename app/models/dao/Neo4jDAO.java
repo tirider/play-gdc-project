@@ -53,9 +53,6 @@ public class Neo4jDAO
         	System.out.println("Reading data from neo4j database...");
         	
         	Iterable<Node> in = graph.getAllNodes();
-        	// for (Node n : GlobalGraphOperations.at(db).getAllNodes()) 
-            // ExecutionEngine engine = new ExecutionEngine( db );
-            // ExecutionResult result;
             
         	Geolocalisation geo = new Geolocalisation();
         	
