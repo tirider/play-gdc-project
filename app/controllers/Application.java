@@ -48,7 +48,7 @@ public class Application extends Controller
     }
 
     /**
-     * Main actions launcher 
+     * This function controls the process of building global model
      * @return
      */
 	public static Model launch()
