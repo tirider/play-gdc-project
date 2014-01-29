@@ -1,4 +1,4 @@
 play-gdc-project
 ==================
 
-Gestion de données compléxes
+Projet de Gestion de Données Compléxes
